@@ -17,15 +17,16 @@ import (
 
 // TCBComponentHeader 组件头信息结构，用于标识自身和组装报文
 type TCBComponentHeader struct {
-	ComponentId  string    //组件名
+	ComponentID  string    //组件名
 	PublisherID  string    //发布消息的署名
 	Version      string    //版本号
 	Intro        string    //介绍
 	Author       string    //作者名称
 	StartTime    time.Time //启动时间
-	SnowID       string    //雪花ID
+	SnowID       int64     //雪花ID
 	ServerNodeId int64     //服务器节点ID
 	Pid          int       //进程ID
+	LocalIP      string    //本地IP
 }
 
 // NewComponentHeader 便捷命令，创建程序头
@@ -34,13 +35,21 @@ func NewComponentHeader(AServerNodeId int64) *TCBComponentHeader {
 	mCtx := gctx.New()
 	mComponentID, _ := g.Config().Get(mCtx, "ntcb.componentId")
 	mPublisherId, _ := g.Config().Get(mCtx, "ntcb.publisherId")
-	mVersion, _ := g.Config().Get(mCtx, "ntcb.version")
+	mVersion, _ := g.Config().Get(mCtx, "ntcb.appVersion")
+	mIntro, _ := g.Config().Get(mCtx, "ntcb.appIntro")
+	mAuthor, _ := g.Config().Get(mCtx, "ntcb.appAuthor")
 
-	a.ComponentId = mComponentID.String()
+	a.ComponentID = mComponentID.String()
 	a.PublisherID = mPublisherId.String()
 	a.Version = mVersion.String()
+	a.Intro = mIntro.String()
+	a.Author = mAuthor.String()
 
+	a.Pid = GetPid()
+	a.LocalIP, _ = GetLocalIP()
 	a.ServerNodeId = AServerNodeId
+	a.SnowID, _ = GetSnowflake(AServerNodeId)
+	a.StartTime = time.Now()
 
 	return a
 }

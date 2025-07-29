@@ -61,27 +61,8 @@ func GetList(r *ghttp.Request) {}
 
 // GetAbout 返回版本信息
 func GetAbout(r *ghttp.Request) {
-	mCtx := gctx.New()
-	mVersion, _ := g.Config().Get(mCtx, "ntcb.appVersion")
-	mIntro, _ := g.Config().Get(mCtx, "ntcb.appIntro")
-	mAuthor, _ := g.Config().Get(mCtx, "ntcb.appAuthor")
-	//获取本地IP和进程ID
-
-	mPid := NTPack.GetPid()
-	mIP, _ := NTPack.GetLocalIP()
-	mSnowID, _ := NTPack.GetSnowflake(ServerNodeId)
-	r.Response.WriteJson(g.Map{
-		"version":      mVersion.String(),
-		"intro":        mIntro.String(),
-		"author":       mAuthor.String(),
-		"startTime":    StartTime.Format("2006-01-02 15:04:05"),
-		"pid":          mPid,
-		"localIp":      mIP,
-		"snowId":       mSnowID,
-		"serverNodeId": ServerNodeId,
-		"publisherId":  PublisherId,
-		"componentId":  ComponentId,
-	})
+	mHeader := NTPack.NewComponentHeader(1)
+	r.Response.WriteJson(mHeader)
 }
 
 // PostReg 接受新程序注册
