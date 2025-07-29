@@ -1,5 +1,7 @@
 github.com/BurntSushi/toml v1.4.0 h1:kuoIxZQy2WRRk1pttg9asf+WVv6tWQuBNVmK8+nqPr0=
 github.com/BurntSushi/toml v1.4.0/go.mod h1:ukJfTF/6rtPPRCnwkur4qwRxa8vTRFBF0uk2lLoLwho=
+github.com/bwmarrin/snowflake v0.3.0 h1:xm67bEhkKh6ij1790JB83OujPR5CzNe8QuQqAgISZN0=
+github.com/bwmarrin/snowflake v0.3.0/go.mod h1:NdZxfVWX+oR6y2K0o6qAYv6gIOP9rjG0/E9WsDpxqwE=
 github.com/clbanning/mxj/v2 v2.7.0 h1:WA/La7UGCanFe5NpHF0Q3DNtnCsVoxbPKuyBNHWRyME=
 github.com/clbanning/mxj/v2 v2.7.0/go.mod h1:hNiWqW14h+kc+MdF9C6/YoRfjEJoR3ou6tn/Qo+ve2s=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
@@ -44,6 +46,8 @@ github.com/sea1812/NTPack v0.0.0-20250729055953-0e5fd73df999 h1:E6vpMhhZJHKfMies
 github.com/sea1812/NTPack v0.0.0-20250729055953-0e5fd73df999/go.mod h1:djz52S0EvJEwDnSPvt2Gp/RblGSvr2qXvJuPHKuY8EY=
 github.com/sea1812/NTPack v0.0.0-20250729060415-13965fa5b904 h1:z71by5Zd3UPmFnhVxmnLcXTWaAOf6uKkbulAGMaZvIw=
 github.com/sea1812/NTPack v0.0.0-20250729060415-13965fa5b904/go.mod h1:djz52S0EvJEwDnSPvt2Gp/RblGSvr2qXvJuPHKuY8EY=
+github.com/sea1812/NTPack v0.0.0-20250729064336-a02e8603897c h1:Ujvb6cQQy2ji2dK62jnnjy8iSGOmwJ4ejaT9CTcnlL8=
+github.com/sea1812/NTPack v0.0.0-20250729064336-a02e8603897c/go.mod h1:JADxBrNGEITyBjFc7mFRQDDHo7OaM2gGjoeCwZaJscw=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
 go.opentelemetry.io/otel v1.24.0 h1:0LAOdjNmQeSTzGBzduGe/rU4tZhMwL5rWgtp9Ku5Jfo=

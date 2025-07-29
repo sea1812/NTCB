@@ -20,10 +20,11 @@ import (
 
 var (
 	// 声明全局变量
-	AccessKey   string
-	PublisherId string
-	ComponentId string
-	StartTime   time.Time
+	AccessKey    string
+	PublisherId  string
+	ComponentId  string
+	StartTime    time.Time
+	ServerNodeId int64
 )
 
 func main() {
@@ -32,9 +33,11 @@ func main() {
 	mAccessKey, _ := g.Config().Get(mCtx, "ntcb.accessKey")
 	mPublisherId, _ := g.Config().Get(mCtx, "ntcb.publisherId")
 	mComponentId, _ := g.Config().Get(mCtx, "ntcb.componentId")
+	mServerNodeId, _ := g.Config().Get(mCtx, "ntcb.serverNodeId")
 	AccessKey = mAccessKey.String()
 	PublisherId = mPublisherId.String()
 	ComponentId = mComponentId.String()
+	ServerNodeId = mServerNodeId.Int64()
 	fmt.Println(AccessKey, PublisherId, ComponentId) //TODO 回头删掉
 	//创建MQTT客户端
 
@@ -62,17 +65,26 @@ func GetAbout(r *ghttp.Request) {
 	mVersion, _ := g.Config().Get(mCtx, "ntcb.appVersion")
 	mIntro, _ := g.Config().Get(mCtx, "ntcb.appIntro")
 	mAuthor, _ := g.Config().Get(mCtx, "ntcb.appAuthor")
+	//获取本地IP和进程ID
+	mPid := NTPack.GetPid()
 	mIP, _ := NTPack.GetLocalIP()
+	mSnowID, _ := NTPack.GetSnowflake(ServerNodeId)
 	r.Response.WriteJson(g.Map{
-		"version":   mVersion.String(),
-		"intro":     mIntro.String(),
-		"author":    mAuthor.String(),
-		"startTime": StartTime.Format("2006-01-02 15:04:05"),
-		"pid":       NTPack.GetPid(),
-		"localIp":   mIP,
+		"version":      mVersion.String(),
+		"intro":        mIntro.String(),
+		"author":       mAuthor.String(),
+		"startTime":    StartTime.Format("2006-01-02 15:04:05"),
+		"pid":          mPid,
+		"localIp":      mIP,
+		"snowId":       mSnowID,
+		"serverNodeId": ServerNodeId,
+		"publisherId":  PublisherId,
+		"componentId":  ComponentId,
 	})
-	//NTPack.GetLocalIP()
+
 }
 
 // PostReg 接受新程序注册
-func PostReg(r *ghttp.Request) {}
+func PostReg(r *ghttp.Request) {
+
+}

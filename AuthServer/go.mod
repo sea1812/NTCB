@@ -4,11 +4,12 @@ go 1.23.4
 
 require (
 	github.com/gogf/gf/v2 v2.8.1
-	github.com/sea1812/NTPack v0.0.0-20250729060415-13965fa5b904
+	github.com/sea1812/NTPack v0.0.0-20250729064336-a02e8603897c
 )
 
 require (
 	github.com/BurntSushi/toml v1.4.0 // indirect
+	github.com/bwmarrin/snowflake v0.3.0 // indirect
 	github.com/clbanning/mxj/v2 v2.7.0 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/fatih/color v1.17.0 // indirect

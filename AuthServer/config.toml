@@ -69,4 +69,5 @@ componentId = "authserver"                          #报文中的Component ID
 appVersion = "1.0.0"                                   #程序版本信息
 appIntro = "处理新程序注册的服务"                         #程序介绍
 appAuthor = "Ntcb Team"                                #作者名称
+serverNodeId = 1                                         #生成雪花ID的Node ID
 
