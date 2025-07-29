@@ -9,9 +9,16 @@
 
 package main
 
-import "github.com/gogf/gf/v2/frame/g"
+import (
+	"fmt"
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gctx"
+)
 
 func main() {
-	server := g.Server()
-	server.Run()
+	//server := g.Server()
+	m, _ := g.Config().Get(gctx.New(), "custom.accessKey")
+	fmt.Println(m)
+	//server.Run()
+
 }

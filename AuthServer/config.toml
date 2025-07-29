@@ -9,7 +9,7 @@ writeTimeout        = "0"                           # 数据返回写入超时�
 idleTimeout         = "60s"                         # 仅当Keep-Alive开启时有效，请求闲置时间。默认为60秒
 maxHeaderBytes      = "10240"                       # 请求Header大小限制（Byte）。默认为10KB
 keepAlive           = true                          # 是否开启Keep-Alive功能。默认true
-serverAgent         = "Auth Server"                 # 服务端Agent信息。默认为"GF HTTP Server"
+serverAgent         = "NTCB AuthServer"                 # 服务端Agent信息。默认为"GF HTTP Server"
 
 # 静态服务配置
 indexFiles          = ["index.html","index.htm"]                    # 自动首页静态文件检索。默认为["base.html", "index.htm"]
@@ -60,4 +60,10 @@ subDomain           = true              # 是否开启二级域名功能
 # 数据库配置
 [database]
 link="pgsql:user=postgres password=postgres host=localhost port=5432 dbname=NTCB_Dev sslmode=disable"
+
+# 自定义设置
+[custom]
+accessKey = "ff1298d1-a3f6-4942-890b-81283034dcde"
+publisher = "authserver"
+componentId = "authserver"
 
