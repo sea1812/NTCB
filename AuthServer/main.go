@@ -44,7 +44,8 @@ func main() {
 	mGroup.GET("/list", GetList)   //返回已注册程序列表
 	mGroup.POST("/reg", PostReg)   //注册新设备
 
-	//TODO 广播消息Auth服务上线
+	//TODO 获取进程ID、IP等数据
+	//TODO 广播Public/Enter消息Auth服务上线，同时发布到日志频道
 
 	s.Run()
 }
