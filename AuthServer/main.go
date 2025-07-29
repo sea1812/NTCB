@@ -14,6 +14,7 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gctx"
+	"time"
 )
 
 var (
@@ -21,6 +22,7 @@ var (
 	AccessKey   string
 	PublisherId string
 	ComponentId string
+	StartTime   time.Time
 )
 
 func main() {
@@ -46,7 +48,7 @@ func main() {
 
 	//TODO 获取进程ID、IP等数据
 	//TODO 广播Public/Enter消息Auth服务上线，同时发布到日志频道
-
+	StartTime = time.Now()
 	s.Run()
 }
 
@@ -60,9 +62,10 @@ func GetAbout(r *ghttp.Request) {
 	mIntro, _ := g.Config().Get(mCtx, "ntcb.appIntro")
 	mAuthor, _ := g.Config().Get(mCtx, "ntcb.appAuthor")
 	r.Response.WriteJson(g.Map{
-		"version": mVersion.String(),
-		"intro":   mIntro.String(),
-		"author":  mAuthor.String(),
+		"version":   mVersion.String(),
+		"intro":     mIntro.String(),
+		"author":    mAuthor.String(),
+		"startTime": StartTime.Format("2006-01-02 15:04:05"),
 	})
 }
 
