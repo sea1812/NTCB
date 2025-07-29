@@ -10,11 +10,11 @@
 package main
 
 import (
+	NTPack "AuthServer/App"
 	"fmt"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gctx"
-	"github.com/sea1812/NTPack"
 	"time"
 )
 
@@ -66,6 +66,7 @@ func GetAbout(r *ghttp.Request) {
 	mIntro, _ := g.Config().Get(mCtx, "ntcb.appIntro")
 	mAuthor, _ := g.Config().Get(mCtx, "ntcb.appAuthor")
 	//获取本地IP和进程ID
+
 	mPid := NTPack.GetPid()
 	mIP, _ := NTPack.GetLocalIP()
 	mSnowID, _ := NTPack.GetSnowflake(ServerNodeId)
@@ -85,5 +86,6 @@ func GetAbout(r *ghttp.Request) {
 
 // PostReg 接受新程序注册
 func PostReg(r *ghttp.Request) {
+	_ = NTPack.TCBComponentHeader{}
 
 }

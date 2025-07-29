@@ -42,12 +42,10 @@ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZN
 github.com/rivo/uniseg v0.2.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
 github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
 github.com/rivo/uniseg v0.4.7/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
-github.com/sea1812/NTPack v0.0.0-20250729055953-0e5fd73df999 h1:E6vpMhhZJHKfMiesKh3sPCXrVJZR4uW6xjEXW7J7Hc0=
-github.com/sea1812/NTPack v0.0.0-20250729055953-0e5fd73df999/go.mod h1:djz52S0EvJEwDnSPvt2Gp/RblGSvr2qXvJuPHKuY8EY=
-github.com/sea1812/NTPack v0.0.0-20250729060415-13965fa5b904 h1:z71by5Zd3UPmFnhVxmnLcXTWaAOf6uKkbulAGMaZvIw=
-github.com/sea1812/NTPack v0.0.0-20250729060415-13965fa5b904/go.mod h1:djz52S0EvJEwDnSPvt2Gp/RblGSvr2qXvJuPHKuY8EY=
 github.com/sea1812/NTPack v0.0.0-20250729064336-a02e8603897c h1:Ujvb6cQQy2ji2dK62jnnjy8iSGOmwJ4ejaT9CTcnlL8=
 github.com/sea1812/NTPack v0.0.0-20250729064336-a02e8603897c/go.mod h1:JADxBrNGEITyBjFc7mFRQDDHo7OaM2gGjoeCwZaJscw=
+github.com/sea1812/NTPack v0.0.0-20250729072823-d709a1150ee8 h1:BLQYv9HPJboC4uZm3MpKJ6YEque3bzVjGEpw0tc/BBg=
+github.com/sea1812/NTPack v0.0.0-20250729072823-d709a1150ee8/go.mod h1:JADxBrNGEITyBjFc7mFRQDDHo7OaM2gGjoeCwZaJscw=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
 go.opentelemetry.io/otel v1.24.0 h1:0LAOdjNmQeSTzGBzduGe/rU4tZhMwL5rWgtp9Ku5Jfo=
