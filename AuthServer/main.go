@@ -14,6 +14,7 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gctx"
+	"github.com/sea1812/NTPack"
 	"time"
 )
 
@@ -61,12 +62,16 @@ func GetAbout(r *ghttp.Request) {
 	mVersion, _ := g.Config().Get(mCtx, "ntcb.appVersion")
 	mIntro, _ := g.Config().Get(mCtx, "ntcb.appIntro")
 	mAuthor, _ := g.Config().Get(mCtx, "ntcb.appAuthor")
+	mIP, _ := NTPack.GetLocalIP()
 	r.Response.WriteJson(g.Map{
 		"version":   mVersion.String(),
 		"intro":     mIntro.String(),
 		"author":    mAuthor.String(),
 		"startTime": StartTime.Format("2006-01-02 15:04:05"),
+		"pid":       NTPack.GetPid(),
+		"localIp":   mIP,
 	})
+	//NTPack.GetLocalIP()
 }
 
 // PostReg 接受新程序注册

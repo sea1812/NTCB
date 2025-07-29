@@ -4,7 +4,7 @@ go 1.23.4
 
 require (
 	github.com/gogf/gf/v2 v2.8.1
-
+	github.com/sea1812/NTPack v0.0.0-20250729060415-13965fa5b904
 )
 
 require (
