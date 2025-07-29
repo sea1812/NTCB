@@ -81,7 +81,6 @@ func GetAbout(r *ghttp.Request) {
 		"publisherId":  PublisherId,
 		"componentId":  ComponentId,
 	})
-
 }
 
 // PostReg 接受新程序注册
