@@ -12,13 +12,58 @@ package main
 import (
 	"fmt"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gctx"
 )
 
-func main() {
-	//server := g.Server()
-	m, _ := g.Config().Get(gctx.New(), "custom.accessKey")
-	fmt.Println(m)
-	//server.Run()
+var (
+	// 声明全局变量
+	AccessKey   string
+	PublisherId string
+	ComponentId string
+)
 
+func main() {
+	//填充全局变量
+	mCtx := gctx.New()
+	mAccessKey, _ := g.Config().Get(mCtx, "ntcb.accessKey")
+	mPublisherId, _ := g.Config().Get(mCtx, "ntcb.publisherId")
+	mComponentId, _ := g.Config().Get(mCtx, "ntcb.componentId")
+	AccessKey = mAccessKey.String()
+	PublisherId = mPublisherId.String()
+	ComponentId = mComponentId.String()
+	fmt.Println(AccessKey, PublisherId, ComponentId) //TODO 回头删掉
+	//创建MQTT客户端
+
+	//TODO 检查消息服务器是否可用，如果不可用则启动消息服务器
+
+	//设置Http路径
+	s := g.Server()
+	mGroup := s.Group("/")
+	mGroup.GET("/about", GetAbout) //返回版本信息
+	mGroup.GET("/list", GetList)   //返回已注册程序列表
+	mGroup.POST("/reg", PostReg)   //注册新设备
+
+	//TODO 广播消息Auth服务上线
+
+	s.Run()
 }
+
+// GetList 返回已注册程序列表
+func GetList(r *ghttp.Request) {}
+
+// GetAbout 返回版本信息
+func GetAbout(r *ghttp.Request) {
+	mCtx := gctx.New()
+	mVersion, _ := g.Config().Get(mCtx, "ntcb.appVersion")
+	mIntro, _ := g.Config().Get(mCtx, "ntcb.appIntro")
+	mAuthor, _ := g.Config().Get(mCtx, "ntcb.appAuthor")
+	r.Response.WriteJson(g.Map{
+		"version": mVersion.String(),
+		"intro":   mIntro.String(),
+		"author":  mAuthor.String(),
+	})
+}
+
+// PostReg 接受新程序注册
+func PostReg(r *ghttp.Request) {}

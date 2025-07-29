@@ -62,8 +62,11 @@ subDomain           = true              # 是否开启二级域名功能
 link="pgsql:user=postgres password=postgres host=localhost port=5432 dbname=NTCB_Dev sslmode=disable"
 
 # 自定义设置
-[custom]
-accessKey = "ff1298d1-a3f6-4942-890b-81283034dcde"
-publisher = "authserver"
-componentId = "authserver"
+[ntcb]
+accessKey = "ff1298d1-a3f6-4942-890b-81283034dcde"  #报文中的Access Key
+publisherId = "authserver"                          #报文中的Publisher ID
+componentId = "authserver"                          #报文中的Component ID
+appVersion = "1.0.0"                                   #程序版本信息
+appIntro = "处理新程序注册的服务"                         #程序介绍
+appAuthor = "Ntcb Team"                                #作者名称
 
