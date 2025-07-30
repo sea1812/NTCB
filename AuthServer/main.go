@@ -69,6 +69,7 @@ func main() {
 	//将自身Header数据插入Components表
 	_, _ = g.DB().Model("Components").Insert(gjson.New(mHeader))
 
+	//TODO 设置定时任务，发送STAT广播
 	//TODO 广播Public/Enter消息Auth服务上线
 	mHeader.AccessKey = "hidden"
 	MqttClient.Publish("ntcb/enter", 0, false, gjson.New(mHeader).String())
