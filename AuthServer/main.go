@@ -54,7 +54,6 @@ func main() {
 	//TODO 检查消息服务器是否可用，如果不可用则退出进程
 	if token := MqttClient.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
-		return
 	}
 	defer MqttClient.Disconnect(250) // 优雅断开连接，等待250ms处理剩余消息
 
@@ -70,8 +69,10 @@ func main() {
 	//将自身Header数据插入Components表
 	_, _ = g.DB().Model("Components").Insert(gjson.New(mHeader))
 
-	//TODO 广播Public/Enter消息Auth服务上线，同时发布到日志频道
-	//TODO 广播"重新注册"消息，预防因AuthServer中途退出或重启而丢失设备。设备自行发布上线消息。
+	//TODO 广播Public/Enter消息Auth服务上线
+	mHeader.AccessKey = "hidden"
+	MqttClient.Publish("ntcb/enter", 0, false, gjson.New(mHeader).String())
+	//TODO 同时发布到日志频道
 
 	s.Run()
 }
@@ -147,12 +148,12 @@ func PostReg(r *ghttp.Request) {
 				//TODO 检查AccessKey是否匹配
 				if m3.AccessKey == AccessKey {
 					//匹配，允许接入
-				} else {
-					//不匹配，不允许接入
-					//如匹配则插入Components表
+					//插入Components表
 					_, er4 := g.DB().Model("Components").Insert(gjson.New(m3))
 					fmt.Println(m3, er4)
 					//返回注册成功和ENV参数
+				} else {
+					//不匹配，不允许接入
 				}
 			}
 		}
