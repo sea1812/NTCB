@@ -71,3 +71,7 @@ appVersion = "1.0.0"                                #程序版本信息
 appIntro = "处理新程序注册的服务"                      #程序介绍
 appAuthor = "Ntcb Team"                             #作者名称
 serverNodeId = 1                                    #生成雪花ID的服务器Node的ID
+reconnectDuration = 30                              #Mqtt最大重新连接时间
+broker = "127.0.0.1:1883"                          #Mqtt服务器地址
+brokerUser = ""                                     #Mqtt服务器用户
+brokerPassword = ""                                 #Mqtt服务器用户密码
