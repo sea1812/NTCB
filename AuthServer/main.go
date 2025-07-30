@@ -59,7 +59,7 @@ func main() {
 	_, _ = g.DB().Model("Components").Delete("1=1")
 	//将自身Header数据插入Components表
 	_, _ = g.DB().Model("Components").Insert(gjson.New(mHeader))
-	
+
 	//TODO 广播Public/Enter消息Auth服务上线，同时发布到日志频道
 	//TODO 广播"重新注册"消息，预防因AuthServer中途退出或重启而丢失设备。设备自行发布上线消息。
 
