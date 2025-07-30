@@ -41,7 +41,7 @@ func main() {
 	PublisherId = mPublisherId.String()
 	ComponentId = mComponentId.String()
 	ServerNodeId = mServerNodeId.Int64()
-	fmt.Println(AccessKey, PublisherId, ComponentId) //TODO 回头删掉
+	StartTime = time.Now()
 	//创建MQTT客户端
 
 	//TODO 检查消息服务器是否可用，如果不可用则启动消息服务器
@@ -53,9 +53,16 @@ func main() {
 	mGroup.GET("/list", GetList)   //返回已注册程序列表
 	mGroup.POST("/reg", PostReg)   //注册新设备
 
-	//TODO 获取进程ID、IP等数据
+	//生成ComponentHeader数据
+	mHeader := NTPack.NewComponentHeader(ServerNodeId)
+	//清理Components表
+	_, _ = g.DB().Model("Components").Delete("1=1")
+	//将自身Header数据插入Components表
+	_, _ = g.DB().Model("Components").Insert(gjson.New(mHeader))
+	
 	//TODO 广播Public/Enter消息Auth服务上线，同时发布到日志频道
-	StartTime = time.Now()
+	//TODO 广播"重新注册"消息，预防因AuthServer中途退出或重启而丢失设备。设备自行发布上线消息。
+
 	s.Run()
 }
 
@@ -68,7 +75,7 @@ func GetAbout(r *ghttp.Request) {
 	//插入Components表，TODO 测试，正式运行时需要删除
 	_, er4 := g.DB().Model("Components").Insert(gjson.New(mHeader))
 	fmt.Println(mHeader, er4)
-	//
+	//TODO 测试结束
 	r.Response.WriteJson(mHeader)
 }
 
@@ -82,12 +89,16 @@ func PostReg(r *ghttp.Request) {
 			var m3 NTPack.TCBComponentHeader
 			er3 := json.Unmarshal(m1bytes, &m3)
 			if er3 != nil {
-				//插入Components表
-				_, er4 := g.DB().Model("Components").Insert(gjson.New(m3))
-				fmt.Println(m3, er4)
-				//返回注册成功和ENV参数
-				//广播重新注册消息，预防因AuthServer中途退出或重启而丢失设备
-
+				//TODO 检查AccessKey是否匹配
+				if m3.AccessKey == AccessKey {
+					//匹配，允许接入
+				} else {
+					//不匹配，不允许接入
+					//如匹配则插入Components表
+					_, er4 := g.DB().Model("Components").Insert(gjson.New(m3))
+					fmt.Println(m3, er4)
+					//返回注册成功和ENV参数
+				}
 			}
 		}
 	}
