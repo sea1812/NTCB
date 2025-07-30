@@ -59,7 +59,8 @@ subDomain           = true              # 是否开启二级域名功能
 
 # 数据库配置
 [database]
-link="pgsql:user=postgres password=postgres host=localhost port=5432 dbname=NTCB_Dev sslmode=disable"
+# link="pgsql:user=postgres password=postgres host=localhost port=5432 dbname=NTCB_Dev sslmode=disable"
+link="pgsql:postgres:postgres@tcp(127.0.0.1:5432)/NTCB_Dev"
 
 # 自定义设置
 [ntcb]

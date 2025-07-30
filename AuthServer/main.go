@@ -11,7 +11,10 @@ package main
 
 import (
 	NTPack "AuthServer/App"
+	"encoding/json"
 	"fmt"
+	_ "github.com/gogf/gf/contrib/drivers/pgsql/v2"
+	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gctx"
@@ -62,11 +65,30 @@ func GetList(r *ghttp.Request) {}
 // GetAbout 返回版本信息
 func GetAbout(r *ghttp.Request) {
 	mHeader := NTPack.NewComponentHeader(1)
+	//插入Components表，TODO 测试，正式运行时需要删除
+	_, er4 := g.DB().Model("Components").Insert(gjson.New(mHeader))
+	fmt.Println(mHeader, er4)
+	//
 	r.Response.WriteJson(mHeader)
 }
 
 // PostReg 接受新程序注册
 func PostReg(r *ghttp.Request) {
-	_ = NTPack.TCBComponentHeader{}
+	//读取客户端提交的注册参数
+	m1, er := r.GetJson()
+	if (m1 != nil) && (er != nil) {
+		m1bytes, er2 := m1.ToJson()
+		if er2 != nil {
+			var m3 NTPack.TCBComponentHeader
+			er3 := json.Unmarshal(m1bytes, &m3)
+			if er3 != nil {
+				//插入Components表
+				_, er4 := g.DB().Model("Components").Insert(gjson.New(m3))
+				fmt.Println(m3, er4)
+				//返回注册成功和ENV参数
+				//广播重新注册消息，预防因AuthServer中途退出或重启而丢失设备
 
+			}
+		}
+	}
 }
