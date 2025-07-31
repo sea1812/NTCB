@@ -55,3 +55,12 @@ func NewComponentHeader(AServerNodeId int64) *TCBComponentHeader {
 
 	return a
 }
+
+// TCBComponentStat 组件状态信息结构，用于生成广播报文
+type TCBComponentStat struct {
+	ComponentID string    `json:"componentID"` //组件ID
+	SnowID      int64     `json:"snowID"`      //雪花ID
+	StatCode    string    `json:"statCode"`    //状态码
+	StatMessage string    `json:"statMessage"` //状态消息
+	StatTime    time.Time `json:"statTime"`    //报告状态的时间
+}

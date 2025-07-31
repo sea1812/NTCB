@@ -29,6 +29,7 @@ var (
 	ComponentId  string
 	StartTime    time.Time
 	ServerNodeId int64
+	SnowID       int64
 
 	// 全局对象 MQTT客户端
 	MqttClient mqtt.Client
@@ -48,6 +49,7 @@ func main() {
 	StartTime = time.Now()
 	//生成ComponentHeader数据
 	mHeader := NTPack.NewComponentHeader(ServerNodeId)
+	SnowID = mHeader.SnowID
 	//创建MQTT客户端
 	InitMqttClient(*mHeader)
 	fmt.Println("Testing message server...")
