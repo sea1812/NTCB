@@ -28,6 +28,7 @@ type TCBComponentHeader struct {
 	Pid          int       `json:"pid"`          //进程ID
 	LocalIP      string    `json:"localIP"`      //本地IP
 	AccessKey    string    `json:"accessKey"`    //Access Key
+	Enable       int       `json:"enable"`       //是否启用
 }
 
 // NewComponentHeader 便捷命令，创建程序头
@@ -52,6 +53,7 @@ func NewComponentHeader(AServerNodeId int64) *TCBComponentHeader {
 	a.ServerNodeID = AServerNodeId
 	a.SnowID, _ = GetSnowflake(AServerNodeId)
 	a.StartTime = time.Now()
+	a.Enable = 1
 
 	return a
 }
@@ -63,4 +65,13 @@ type TCBComponentStat struct {
 	StatCode    string    `json:"statCode"`    //状态码
 	StatMessage string    `json:"statMessage"` //状态消息
 	StatTime    time.Time `json:"statTime"`    //报告状态的时间
+}
+
+// TCBComponentLog 日志信息结构，用于生成日志报文
+type TCBComponentLog struct {
+	ComponentID string    `json:"componentID"` //组件ID
+	SnowID      int64     `json:"snowID"`      //雪花ID
+	LogTime     time.Time `json:"logTime"`     //日志时间
+	Type        string    `json:"type"`        //日志类型
+	LogMessage  string    `json:"logMessage"`  //日志内容
 }

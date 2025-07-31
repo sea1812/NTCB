@@ -11,6 +11,7 @@ package main
 
 import (
 	NTPack "AuthServer/App"
+	"context"
 	"encoding/json"
 	"fmt"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
@@ -18,6 +19,7 @@ import (
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
+	"github.com/gogf/gf/v2/os/gcron"
 	"github.com/gogf/gf/v2/os/gctx"
 	"time"
 )
@@ -67,17 +69,35 @@ func main() {
 	mGroup.POST("/reg", PostReg)   //注册新设备
 
 	//清理Components表
-	_, _ = g.DB().Model("Components").Delete("1=1")
+	_, _ = g.DB().Model("Components").Update(g.Map{"Enable": 0})
 	//将自身Header数据插入Components表
 	_, _ = g.DB().Model("Components").Insert(gjson.New(mHeader))
 
-	//TODO 设置定时任务，发送STAT广播
+	//TODO 设置定时任务，发送STAT广播，默认为每10分钟
+	mPattern, _ := g.Config().Get(mCtx, "ntcb.statCronPattern")
+	mPatternString := mPattern.String()
+	if mPatternString != "" {
+		mPatternString = "# */10 * * * *"
+	}
+	_, _ = gcron.Add(mCtx, mPatternString, func(ctx context.Context) {
+		mStat := NTPack.TCBComponentStat{
+			ComponentID: ComponentId,
+			SnowID:      SnowID,
+			StatMessage: "",
+			StatCode:    "200",
+			StatTime:    time.Now(),
+		}
+		MqttClient.Publish(NTPack.C_Public_Stat_Topic, 0, false, gjson.New(mStat).String())
+	}, "AuthServerStat")
+	//启动定时任务
+	gcron.Start("AuthServerStat")
 	//TODO 广播Public/Enter消息Auth服务上线
 	mHeader.AccessKey = "hidden"
-	MqttClient.Publish("ntcb/enter", 0, false, gjson.New(mHeader).String())
+	MqttClient.Publish(NTPack.C_Public_Enter_Topic, 0, false, gjson.New(mHeader).String())
 	//TODO 同时发布到日志频道
 
 	s.Run()
+
 }
 
 func MqttOnConnect(client mqtt.Client) {

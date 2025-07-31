@@ -75,3 +75,4 @@ reconnectDuration = 30                              #Mqtt最大重新连接时�
 broker = "127.0.0.1:1883"                          #Mqtt服务器地址
 brokerUser = ""                                     #Mqtt服务器用户
 brokerPassword = ""                                 #Mqtt服务器用户密码
+statCronPattern = "# */10 * * * *"                  #定期回报Stat消息的定时任务Pattern
