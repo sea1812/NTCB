@@ -28,7 +28,7 @@ type TCBComponentHeader struct {
 	Pid          int       `json:"pid"`          //进程ID
 	LocalIP      string    `json:"localIP"`      //本地IP
 	AccessKey    string    `json:"accessKey"`    //Access Key
-	Enable       int       `json:"enable"`       //是否启用
+	CompEnabled  int       `json:"compEnabled"`  //是否启用
 }
 
 // NewComponentHeader 便捷命令，创建程序头
@@ -53,7 +53,7 @@ func NewComponentHeader(AServerNodeId int64) *TCBComponentHeader {
 	a.ServerNodeID = AServerNodeId
 	a.SnowID, _ = GetSnowflake(AServerNodeId)
 	a.StartTime = time.Now()
-	a.Enable = 1
+	a.CompEnabled = 1
 
 	return a
 }

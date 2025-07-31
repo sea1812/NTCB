@@ -52,10 +52,17 @@ func main() {
 	//生成ComponentHeader数据
 	mHeader := NTPack.NewComponentHeader(ServerNodeId)
 	SnowID = mHeader.SnowID
+	//清理Components表
+	//er := g.DB().Model("Components").Data("Enable", 0).Where("Enable", 1)
+	_, _ = g.DB().Model("Components").Update("CompEnabled=0", "CompEnabled=1")
+	mJson := gjson.New(mHeader)
+	//将自身Header数据插入Components表
+	_, _ = g.DB().Model("Components").Insert(mJson)
+
 	//创建MQTT客户端
 	InitMqttClient(*mHeader)
 	fmt.Println("Testing message server...")
-	//TODO 检查消息服务器是否可用，如果不可用则退出进程
+	//检查消息服务器是否可用，如果不可用则退出进程（当然这需要花费超时和重试的时间后才能触发异常退出）
 	if token := MqttClient.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
@@ -68,15 +75,10 @@ func main() {
 	mGroup.GET("/list", GetList)   //返回已注册程序列表
 	mGroup.POST("/reg", PostReg)   //注册新设备
 
-	//清理Components表
-	_, _ = g.DB().Model("Components").Update(g.Map{"Enable": 0})
-	//将自身Header数据插入Components表
-	_, _ = g.DB().Model("Components").Insert(gjson.New(mHeader))
-
 	//设置定时任务，发送STAT广播，默认为每10分钟
 	mPattern, _ := g.Config().Get(mCtx, "ntcb.statCronPattern")
 	mPatternString := mPattern.String()
-	if mPatternString != "" {
+	if mPatternString == "" {
 		mPatternString = "# */10 * * * *"
 	}
 	_, _ = gcron.Add(mCtx, mPatternString, func(ctx context.Context) {
