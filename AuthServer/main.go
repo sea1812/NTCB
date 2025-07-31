@@ -73,7 +73,7 @@ func main() {
 	//将自身Header数据插入Components表
 	_, _ = g.DB().Model("Components").Insert(gjson.New(mHeader))
 
-	//TODO 设置定时任务，发送STAT广播，默认为每10分钟
+	//设置定时任务，发送STAT广播，默认为每10分钟
 	mPattern, _ := g.Config().Get(mCtx, "ntcb.statCronPattern")
 	mPatternString := mPattern.String()
 	if mPatternString != "" {
@@ -91,11 +91,18 @@ func main() {
 	}, "AuthServerStat")
 	//启动定时任务
 	gcron.Start("AuthServerStat")
-	//TODO 广播Public/Enter消息Auth服务上线
+	//广播Public/Enter消息Auth服务上线
 	mHeader.AccessKey = "hidden"
 	MqttClient.Publish(NTPack.C_Public_Enter_Topic, 0, false, gjson.New(mHeader).String())
 	//TODO 同时发布到日志频道
-
+	mLog := NTPack.TCBComponentLog{
+		ComponentID: ComponentId,
+		SnowID:      SnowID,
+		Type:        "service",
+		LogMessage:  "AuthServerStart",
+		Category:    "AuthServer",
+	}
+	MqttClient.Publish(NTPack.C_Public_Log_Topic, 0, false, gjson.New(mLog).String())
 	s.Run()
 
 }

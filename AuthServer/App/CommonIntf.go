@@ -72,6 +72,7 @@ type TCBComponentLog struct {
 	ComponentID string    `json:"componentID"` //组件ID
 	SnowID      int64     `json:"snowID"`      //雪花ID
 	LogTime     time.Time `json:"logTime"`     //日志时间
-	Type        string    `json:"type"`        //日志类型
+	Category    string    `json:"category"`    //日志分类，如Auth Server
+	Type        string    `json:"type"`        //日志类型，如Service、Daemon、Bot
 	LogMessage  string    `json:"logMessage"`  //日志内容
 }
