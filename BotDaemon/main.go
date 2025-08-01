@@ -52,11 +52,11 @@ func main() {
 			}
 			defer MqttClient.Disconnect(250) // 优雅断开连接，等待250ms处理剩余消息
 			//在OnConnectEvent中订阅指令信道
-			//发布上线通报
-			//广播Public/Enter消息Auth服务上线
+			//发布上线通报，广播Public/Enter消息Auth服务上线
 			CompHeader.AccessKey = "hidden"
 			MqttClient.Publish(NTPack.C_Public_Enter_Topic, 0, false, gjson.New(CompHeader).String())
 			//设置定时任务，发布STAT通报
+
 			//进入循环，等待退出信号
 			//退出信号触发，发出离线消息
 		}
