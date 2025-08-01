@@ -12,8 +12,12 @@ package NTPack
 import (
 	"fmt"
 	"github.com/bwmarrin/snowflake"
+	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gctx"
 	"net"
 	"os"
+	"time"
 )
 
 // GetPid 获取进程ID
@@ -64,4 +68,33 @@ func GetSnowflake(anode int64) (int64, error) {
 	id := node.Generate()
 	return id.Int64(), nil
 
+}
+
+// InitMqttClient 初始化Mqtt客户端
+func InitMqttClient(AComponent TCBComponentHeader, OnConnectEvent mqtt.OnConnectHandler, OnLostConnectEvent mqtt.ConnectionLostHandler, OnMessageEvent mqtt.MessageHandler) mqtt.Client {
+	//从Config文件读取参数
+	mCtx := gctx.New()
+	mReconnectDuration, _ := g.Config().Get(mCtx, "ntcb.reconnectDuration") //最大重新连接时间
+	mBroker, _ := g.Config().Get(mCtx, "ntcb.broker")                       //MQTT服务器地址
+	mBrokerUser, _ := g.Config().Get(mCtx, "ntcb.brokerUser")               //MQTT服务器用户
+	mBrokerPassword, _ := g.Config().Get(mCtx, "ntcb.brokerPassword")       //MQTT服务器用户密码
+
+	opts := mqtt.NewClientOptions()
+	opts.SetAutoReconnect(true)
+	opts.SetConnectRetry(true)
+	opts.SetConnectRetryInterval(30 * time.Second) //设置超时重试时间为15秒
+	opts.SetKeepAlive(15 * time.Second)            //设置心跳为15秒
+	//客户端ID为Component，本地IP和进程PID的组合
+	opts.SetClientID(fmt.Sprintf("%s_%s_%d", AComponent.ComponentID, AComponent.LocalIP, AComponent.Pid))
+	opts.SetMaxReconnectInterval(time.Duration(mReconnectDuration.Int()) * time.Second)
+	opts.AddBroker(mBroker.String())
+	//设置Mqtt客户端事件
+	opts.SetOnConnectHandler(OnConnectEvent)
+	opts.SetConnectionLostHandler(OnLostConnectEvent)
+	opts.SetDefaultPublishHandler(OnMessageEvent)
+	//设置Mqtt客户端用户名和密码
+	opts.SetUsername(mBrokerUser.String())
+	opts.SetPassword(mBrokerPassword.String())
+	// 创建客户端
+	return mqtt.NewClient(opts)
 }

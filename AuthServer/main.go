@@ -60,7 +60,8 @@ func main() {
 	_, _ = g.DB().Model("Components").Insert(mJson)
 
 	//创建MQTT客户端
-	InitMqttClient(*mHeader)
+	//InitMqttClient(*mHeader)
+	MqttClient = NTPack.InitMqttClient(*mHeader, MqttOnConnect, MqttOnLostConnect, MqttOnMessage)
 	fmt.Println("Testing message server...")
 	//检查消息服务器是否可用，如果不可用则退出进程（当然这需要花费超时和重试的时间后才能触发异常退出）
 	if token := MqttClient.Connect(); token.Wait() && token.Error() != nil {

@@ -11,10 +11,16 @@ package main
 
 import (
 	"fmt"
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
+	"github.com/gogf/gf/v2/util/gconv"
 	NTPack "github.com/sea1812/NTCB/AuthServer/App"
+)
+
+var (
+	MqttClient mqtt.Client
 )
 
 func main() {
@@ -27,16 +33,23 @@ func main() {
 	mServerIDInt := mServerID.Int64()
 	//生成ComponentHeader
 	mHeader := NTPack.NewComponentHeader(mServerIDInt)
-	fmt.Println(mHeader)
-	Result, er := g.Client().Post(mCtx, mAuthServerString, gjson.New(mHeader).String(), nil)
-	fmt.Println(Result.ReadAllString(), er)
-
 	//向AuthServer申请注册
-	//创建Mqtt客户端
-	//连接到Broker
-	//订阅指令信道
-	//发布上线通报
-	//设置定时任务，发布STAT通报
-	//进入循环，等待退出信号
-	//退出信号触发，发出离线消息
+	Result, er := g.Client().Post(mCtx, mAuthServerString, gjson.New(mHeader).String())
+	if er == nil {
+		mResult := gjson.New(Result.ReadAllString()).Map()
+		fmt.Println(mResult)
+		if gconv.Int(mResult["code"]) == 200 {
+			//注册成功，继续
+			//创建Mqtt客户端
+
+			//连接到Broker
+			//订阅指令信道
+			//发布上线通报
+			//设置定时任务，发布STAT通报
+			//进入循环，等待退出信号
+			//退出信号触发，发出离线消息
+		}
+	} else {
+		panic(er)
+	}
 }
