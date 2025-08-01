@@ -112,6 +112,8 @@ func MqttOnConnect(client mqtt.Client) {
 	//fmt.Println("Connected")
 	//TODO 订阅频道
 	MqttClient.Subscribe("ntcb/#", 0, nil)
+	//订阅Daemon专属频道
+	MqttClient.Subscribe(NTPack.C_Daemon_Topic+"/#", 0, nil)
 }
 
 func MqttOnLostConnect(client mqtt.Client, err error) {
@@ -119,7 +121,5 @@ func MqttOnLostConnect(client mqtt.Client, err error) {
 }
 
 func MqttOnMessage(client mqtt.Client, Message mqtt.Message) {
-	//fmt.Println("OnMessage___________________")
-	//fmt.Println(Message.Topic())
-	//fmt.Println(string(Message.Payload()))
+	//处理Daemon专属频道来的消息
 }

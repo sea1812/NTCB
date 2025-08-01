@@ -17,4 +17,5 @@ const (
 	C_Public_Notice_Topic = "ntcb/Notice" //公共通知下发频道，在此频道广播公共通知消息
 	C_Public_Log_Topic    = "ntcb/Log"    //日志通知频道，在此频道广播日志消息，由后台服务接收消息并写入数据库
 	C_Public_Stat_Topic   = "ntcb/Stat"   //组件状态通知频道，组件在此频道广播运行状态消息
+	C_Daemon_Topic        = "ntcb/Daemon" //Daemon专属频道，针对Daemon指令在此频道广播下发
 )
