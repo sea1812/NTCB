@@ -11,13 +11,19 @@ package main
 
 import "C"
 import (
+	"context"
 	"fmt"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gcron"
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/util/gconv"
 	NTPack "github.com/sea1812/NTCB/AuthServer/App"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 )
 
 var (
@@ -26,6 +32,14 @@ var (
 )
 
 func main() {
+	sigs := make(chan os.Signal, 1)
+	done := make(chan bool, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+		<-sigs
+		done <- true
+	}()
+
 	//获取Config中的参数
 	mCtx := gctx.New()
 	//获取注册参数
@@ -56,13 +70,42 @@ func main() {
 			CompHeader.AccessKey = "hidden"
 			MqttClient.Publish(NTPack.C_Public_Enter_Topic, 0, false, gjson.New(CompHeader).String())
 			//设置定时任务，发布STAT通报
-
-			//进入循环，等待退出信号
-			//退出信号触发，发出离线消息
+			//设置定时任务，发送STAT广播，默认为每10分钟
+			mPattern, _ := g.Config().Get(mCtx, "ntcb.statCronPattern")
+			mPatternString := mPattern.String()
+			if mPatternString == "" {
+				mPatternString = "# */10 * * * *"
+			}
+			_, _ = gcron.Add(mCtx, mPatternString, func(ctx context.Context) {
+				mStat := NTPack.TCBComponentStat{
+					ComponentID: CompHeader.ComponentID,
+					SnowID:      CompHeader.SnowID,
+					StatMessage: "",
+					StatCode:    "200",
+					StatTime:    time.Now(),
+				}
+				MqttClient.Publish(NTPack.C_Public_Stat_Topic, 0, false, gjson.New(mStat).String())
+			}, "AuthServerStat")
+			//启动定时任务
+			gcron.Start("AuthServerStat")
+			//广播Public/Enter消息Auth服务上线
+			CompHeader.AccessKey = "hidden"
+			MqttClient.Publish(NTPack.C_Public_Enter_Topic, 0, false, gjson.New(CompHeader).String())
+			//开始等候MQTT消息启动动作
+			fmt.Println("Bot Daemon is running.")
 		}
 	} else {
 		panic(er)
 	}
+	//进入循环，等待退出信号
+	go func() {
+	}()
+
+	<-done
+	//退出信号触发，发出离线消息
+	CompHeader.AccessKey = "hidden"
+	MqttClient.Publish(NTPack.C_Public_Exit_Topic, 0, false, gjson.New(CompHeader).String())
+
 }
 
 func MqttOnConnect(client mqtt.Client) {
