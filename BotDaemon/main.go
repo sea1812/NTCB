@@ -9,6 +9,34 @@
 
 package main
 
-func main() {
+import (
+	"fmt"
+	"github.com/gogf/gf/v2/encoding/gjson"
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gctx"
+	NTPack "github.com/sea1812/NTCB/AuthServer/App"
+)
 
+func main() {
+	//获取Config中的参数
+	mCtx := gctx.New()
+	//获取注册参数
+	mAuthServer, _ := g.Config().Get(mCtx, "ntcb.authServer")
+	mAuthServerString := mAuthServer.String() + "/reg"
+	mServerID, _ := g.Config().Get(mCtx, "serverID")
+	mServerIDInt := mServerID.Int64()
+	//生成ComponentHeader
+	mHeader := NTPack.NewComponentHeader(mServerIDInt)
+	fmt.Println(mHeader)
+	Result, er := g.Client().Post(mCtx, mAuthServerString, gjson.New(mHeader).String(), nil)
+	fmt.Println(Result.ReadAllString(), er)
+
+	//向AuthServer申请注册
+	//创建Mqtt客户端
+	//连接到Broker
+	//订阅指令信道
+	//发布上线通报
+	//设置定时任务，发布STAT通报
+	//进入循环，等待退出信号
+	//退出信号触发，发出离线消息
 }

@@ -110,19 +110,19 @@ func main() {
 }
 
 func MqttOnConnect(client mqtt.Client) {
-	fmt.Println("Connected")
+	//fmt.Println("Connected")
 	//订阅频道
 	MqttClient.Subscribe("ntcb/#", 0, nil)
 }
 
 func MqttOnLostConnect(client mqtt.Client, err error) {
-	fmt.Println("LostConnect")
+	//fmt.Println("LostConnect")
 }
 
 func MqttOnMessage(client mqtt.Client, Message mqtt.Message) {
-	fmt.Println("OnMessage___________________")
-	fmt.Println(Message.Topic())
-	fmt.Println(string(Message.Payload()))
+	//fmt.Println("OnMessage___________________")
+	//fmt.Println(Message.Topic())
+	//fmt.Println(string(Message.Payload()))
 }
 
 // InitMqttClient 初始化Mqtt客户端
@@ -171,23 +171,46 @@ func GetAbout(r *ghttp.Request) {
 func PostReg(r *ghttp.Request) {
 	//读取客户端提交的注册参数
 	m1, er := r.GetJson()
-	if (m1 != nil) && (er != nil) {
+	if (m1 != nil) && (er == nil) {
 		m1bytes, er2 := m1.ToJson()
-		if er2 != nil {
+		if er2 == nil {
 			var m3 NTPack.TCBComponentHeader
 			er3 := json.Unmarshal(m1bytes, &m3)
-			if er3 != nil {
+			if er3 == nil {
 				//TODO 检查AccessKey是否匹配
 				if m3.AccessKey == AccessKey {
 					//匹配，允许接入
 					//插入Components表
-					_, er4 := g.DB().Model("Components").Insert(gjson.New(m3))
-					fmt.Println(m3, er4)
-					//返回注册成功和ENV参数
+					_, _ = g.DB().Model("Components").Insert(gjson.New(m1))
+
+					//返回注册成功
+					r.Response.WriteJson(g.Map{
+						"code":    200,
+						"message": "register success",
+					})
 				} else {
 					//不匹配，不允许接入
+					r.Response.WriteJson(g.Map{
+						"code":    404,
+						"message": "register fail",
+					})
 				}
+			} else {
+				r.Response.WriteJson(g.Map{
+					"code":    502,
+					"message": fmt.Sprint(er3),
+				})
 			}
+		} else {
+			r.Response.WriteJson(g.Map{
+				"code":    501,
+				"message": fmt.Sprint(er2),
+			})
 		}
+	} else {
+		r.Response.WriteJson(g.Map{
+			"code":    500,
+			"message": fmt.Sprintln(er),
+		})
 	}
 }
