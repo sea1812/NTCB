@@ -105,7 +105,7 @@ func main() {
 	//退出信号触发，发出离线消息
 	CompHeader.AccessKey = "hidden"
 	MqttClient.Publish(NTPack.C_Public_Exit_Topic, 0, false, gjson.New(CompHeader).String())
-
+	fmt.Println("Bot Daemon exited.")
 }
 
 func MqttOnConnect(client mqtt.Client) {
