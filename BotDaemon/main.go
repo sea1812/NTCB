@@ -12,6 +12,7 @@ package main
 import "C"
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/gogf/gf/v2/encoding/gjson"
@@ -69,7 +70,6 @@ func main() {
 			//发布上线通报，广播Public/Enter消息Auth服务上线
 			CompHeader.AccessKey = "hidden"
 			MqttClient.Publish(NTPack.C_Public_Enter_Topic, 0, false, gjson.New(CompHeader).String())
-			//设置定时任务，发布STAT通报
 			//设置定时任务，发送STAT广播，默认为每10分钟
 			mPattern, _ := g.Config().Get(mCtx, "ntcb.statCronPattern")
 			mPatternString := mPattern.String()
@@ -121,5 +121,27 @@ func MqttOnLostConnect(client mqtt.Client, err error) {
 }
 
 func MqttOnMessage(client mqtt.Client, Message mqtt.Message) {
-	//处理Daemon专属频道来的消息
+	//处理Daemon专属频道来的消息，主要是启动Bot命令
+	var mCmd NTPack.TCBDaemonCommand
+	//拆解命令数据结构
+	if Message.Topic() == NTPack.C_Daemon_Topic {
+		m1, _ := gjson.New(Message.Payload()).ToJson()
+		er := json.Unmarshal(m1, &mCmd)
+		if er == nil {
+			if mCmd.DaemonSnowID == CompHeader.SnowID {
+				//确定是发给自己的，根据Command的命令字分别处理
+				switch mCmd.CommandKey {
+				case NTPack.CMD_DAEMON_START_BOT:
+					//根据CommandWithArguments的设定，在协程里创建Bot进程
+					go CreateBotProcess(mCmd)
+					break
+				}
+			}
+		}
+	}
+}
+
+// CreateBotProcess 创建Bot进程
+func CreateBotProcess(ACmd NTPack.TCBDaemonCommand) {
+	
 }
