@@ -147,6 +147,7 @@ func CreateBotProcess(ACmd NTPack.TCBDaemonCommand) {
 	var mCode int = 200
 	var mMessage string = ""
 	cmd := exec.Command(ACmd.CommandString, ACmd.CommandArguments)
+	//用异步方式启动
 	er := cmd.Start()
 	if er != nil {
 		mCode = 500
@@ -158,5 +159,14 @@ func CreateBotProcess(ACmd NTPack.TCBDaemonCommand) {
 		PublishTime: time.Now(),
 		Code:        mCode,
 		Message:     mMessage,
+	}).String())
+	//发布Log消息
+	MqttClient.Publish(NTPack.C_Public_Log_Topic, 0, false, gjson.New(NTPack.TCBComponentLog{
+		ComponentID: CompHeader.ComponentID,
+		SnowID:      CompHeader.SnowID,
+		LogTime:     time.Now(),
+		Category:    "daemon",
+		Type:        "daemon",
+		LogMessage:  gjson.New(ACmd).String(),
 	}).String())
 }
