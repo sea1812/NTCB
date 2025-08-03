@@ -79,11 +79,20 @@ type TCBComponentLog struct {
 
 // TCBDaemonCommand Daemon频道广播的命令消息结构
 type TCBDaemonCommand struct {
-	PublisherID          string    `json:"publisherID"`  //发送者的ComponentID
-	PublishTime          time.Time `json:"publishTime"`  //发送时间
-	CommandID            string    `json:"commandID"`    //命令ID
-	DaemonSnowID         int64     `json:"deamonSnowID"` //接受者只能是Daemon，这里填写他的SnowID
-	CommandKey           string    `json:"command"`      //命令字
-	BotID                string    `json:"botID"`        //作用对象Bot的ComponentID
-	CommandWithArguments string    `json:"arguments"`    //带参数的启动命令行，作为创建进程时
+	PublisherID      string    `json:"publisherID"`      //发送者的ComponentID
+	PublishTime      time.Time `json:"publishTime"`      //发送时间
+	CommandID        string    `json:"commandID"`        //命令ID
+	DaemonSnowID     int64     `json:"daemonSnowID"`     //接受者只能是Daemon，这里填写他的SnowID
+	CommandKey       string    `json:"command"`          //命令字
+	BotID            string    `json:"botID"`            //作用对象Bot的ComponentID
+	CommandString    string    `json:"commandString"`    //启动命令行，作为创建进程时用
+	CommandArguments string    `json:"commandArguments"` //启动命令行的参数
+}
+
+// TCBDaemonCommandReceipt 通过Daemon/Receipt频道发送的命令执行回执
+type TCBDaemonCommandReceipt struct {
+	CommandID   string    `json:"commandID"`   //发送的CommandID
+	PublishTime time.Time `json:"publishTime"` //回执时间
+	Code        int       `json:"code"`        //状态码
+	Message     string    `json:"message"`     //信息文本
 }

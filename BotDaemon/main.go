@@ -22,6 +22,7 @@ import (
 	"github.com/gogf/gf/v2/util/gconv"
 	NTPack "github.com/sea1812/NTCB/AuthServer/App"
 	"os"
+	"os/exec"
 	"os/signal"
 	"syscall"
 	"time"
@@ -132,7 +133,7 @@ func MqttOnMessage(client mqtt.Client, Message mqtt.Message) {
 				//确定是发给自己的，根据Command的命令字分别处理
 				switch mCmd.CommandKey {
 				case NTPack.CMD_DAEMON_START_BOT:
-					//根据CommandWithArguments的设定，在协程里创建Bot进程
+					//根据CommandString和CommandArguments的设定，在协程里创建Bot进程
 					go CreateBotProcess(mCmd)
 					break
 				}
@@ -143,5 +144,19 @@ func MqttOnMessage(client mqtt.Client, Message mqtt.Message) {
 
 // CreateBotProcess 创建Bot进程
 func CreateBotProcess(ACmd NTPack.TCBDaemonCommand) {
-	
+	var mCode int = 200
+	var mMessage string = ""
+	cmd := exec.Command(ACmd.CommandString, ACmd.CommandArguments)
+	er := cmd.Start()
+	if er != nil {
+		mCode = 500
+		mMessage = er.Error()
+	}
+	//返回消息已执行的回报
+	MqttClient.Publish(NTPack.C_Daemon_Receipt_Topic, 0, false, gjson.New(NTPack.TCBDaemonCommandReceipt{
+		CommandID:   ACmd.CommandID,
+		PublishTime: time.Now(),
+		Code:        mCode,
+		Message:     mMessage,
+	}).String())
 }
