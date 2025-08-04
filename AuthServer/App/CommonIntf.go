@@ -32,15 +32,15 @@ type TCBComponentHeader struct {
 }
 
 // NewComponentHeader 便捷命令，创建程序头
-func NewComponentHeader(AServerNodeId int64) *TCBComponentHeader {
+func NewComponentHeader(AServerNodeId int64, Config string) *TCBComponentHeader {
 	a := new(TCBComponentHeader)
 	mCtx := gctx.New()
-	mComponentID, _ := g.Config().Get(mCtx, "ntcb.componentId")
-	mPublisherId, _ := g.Config().Get(mCtx, "ntcb.publisherId")
-	mVersion, _ := g.Config().Get(mCtx, "ntcb.appVersion")
-	mIntro, _ := g.Config().Get(mCtx, "ntcb.appIntro")
-	mAuthor, _ := g.Config().Get(mCtx, "ntcb.appAuthor")
-	mAccessKey, _ := g.Config().Get(mCtx, "ntcb.accessKey")
+	mComponentID, _ := g.Config(Config).Get(mCtx, "ntcb.componentId")
+	mPublisherId, _ := g.Config(Config).Get(mCtx, "ntcb.publisherId")
+	mVersion, _ := g.Config(Config).Get(mCtx, "ntcb.appVersion")
+	mIntro, _ := g.Config(Config).Get(mCtx, "ntcb.appIntro")
+	mAuthor, _ := g.Config(Config).Get(mCtx, "ntcb.appAuthor")
+	mAccessKey, _ := g.Config(Config).Get(mCtx, "ntcb.accessKey")
 
 	a.ComponentID = mComponentID.String()
 	a.PublisherID = mPublisherId.String()

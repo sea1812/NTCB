@@ -50,7 +50,7 @@ func main() {
 	ServerNodeId = mServerNodeId.Int64()
 	StartTime = time.Now()
 	//生成ComponentHeader数据
-	mHeader := NTPack.NewComponentHeader(ServerNodeId)
+	mHeader := NTPack.NewComponentHeader(ServerNodeId, "")
 	SnowID = mHeader.SnowID
 	//清理Components表
 	//er := g.DB().Model("Components").Data("Enable", 0).Where("Enable", 1)
@@ -61,7 +61,7 @@ func main() {
 
 	//创建MQTT客户端
 	//InitMqttClient(*mHeader)
-	MqttClient = NTPack.InitMqttClient(*mHeader, MqttOnConnect, MqttOnLostConnect, MqttOnMessage)
+	MqttClient = NTPack.InitMqttClient(*mHeader, MqttOnConnect, MqttOnLostConnect, MqttOnMessage, "")
 	fmt.Println("Testing message server...")
 	//检查消息服务器是否可用，如果不可用则退出进程（当然这需要花费超时和重试的时间后才能触发异常退出）
 	if token := MqttClient.Connect(); token.Wait() && token.Error() != nil {
@@ -160,7 +160,7 @@ func GetList(r *ghttp.Request) {}
 
 // GetAbout 返回版本信息
 func GetAbout(r *ghttp.Request) {
-	mHeader := NTPack.NewComponentHeader(1)
+	mHeader := NTPack.NewComponentHeader(1, "")
 	//插入Components表，TODO 测试，正式运行时需要删除
 	_, er4 := g.DB().Model("Components").Insert(gjson.New(mHeader))
 	fmt.Println(mHeader, er4)

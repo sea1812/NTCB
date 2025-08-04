@@ -50,7 +50,7 @@ func main() {
 	mServerID, _ := g.Config().Get(mCtx, "serverID")
 	mServerIDInt := mServerID.Int64()
 	//生成ComponentHeader
-	CompHeader := NTPack.NewComponentHeader(mServerIDInt)
+	CompHeader = NTPack.NewComponentHeader(mServerIDInt, "")
 	//向AuthServer申请注册
 	fmt.Println("Registering...")
 	Result, er := g.Client().Post(mCtx, mAuthServerString, gjson.New(CompHeader).String())
@@ -60,7 +60,7 @@ func main() {
 			//注册成功，继续
 			fmt.Println("Register success. Connecting message broker...")
 			//创建Mqtt客户端
-			MqttClient = NTPack.InitMqttClient(*CompHeader, MqttOnConnect, MqttOnLostConnect, MqttOnMessage)
+			MqttClient = NTPack.InitMqttClient(*CompHeader, MqttOnConnect, MqttOnLostConnect, MqttOnMessage, "")
 			//连接到Broker
 			//检查消息服务器是否可用，如果不可用则退出进程（当然这需要花费超时和重试的时间后才能触发异常退出）
 			if token := MqttClient.Connect(); token.Wait() && token.Error() != nil {

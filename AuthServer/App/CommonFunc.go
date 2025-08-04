@@ -71,13 +71,13 @@ func GetSnowflake(anode int64) (int64, error) {
 }
 
 // InitMqttClient 初始化Mqtt客户端
-func InitMqttClient(AComponent TCBComponentHeader, OnConnectEvent mqtt.OnConnectHandler, OnLostConnectEvent mqtt.ConnectionLostHandler, OnMessageEvent mqtt.MessageHandler) mqtt.Client {
+func InitMqttClient(AComponent TCBComponentHeader, OnConnectEvent mqtt.OnConnectHandler, OnLostConnectEvent mqtt.ConnectionLostHandler, OnMessageEvent mqtt.MessageHandler, Config string) mqtt.Client {
 	//从Config文件读取参数
 	mCtx := gctx.New()
-	mReconnectDuration, _ := g.Config().Get(mCtx, "ntcb.reconnectDuration") //最大重新连接时间
-	mBroker, _ := g.Config().Get(mCtx, "ntcb.broker")                       //MQTT服务器地址
-	mBrokerUser, _ := g.Config().Get(mCtx, "ntcb.brokerUser")               //MQTT服务器用户
-	mBrokerPassword, _ := g.Config().Get(mCtx, "ntcb.brokerPassword")       //MQTT服务器用户密码
+	mReconnectDuration, _ := g.Config(Config).Get(mCtx, "ntcb.reconnectDuration") //最大重新连接时间
+	mBroker, _ := g.Config(Config).Get(mCtx, "ntcb.broker")                       //MQTT服务器地址
+	mBrokerUser, _ := g.Config(Config).Get(mCtx, "ntcb.brokerUser")               //MQTT服务器用户
+	mBrokerPassword, _ := g.Config(Config).Get(mCtx, "ntcb.brokerPassword")       //MQTT服务器用户密码
 
 	opts := mqtt.NewClientOptions()
 	opts.SetAutoReconnect(true)
