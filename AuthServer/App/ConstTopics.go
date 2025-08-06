@@ -19,7 +19,9 @@ const (
 	C_Public_Stat_Topic    = "ntcb/Stat"           //组件状态通知频道，组件在此频道广播运行状态消息
 	C_Daemon_Topic         = "ntcb/Daemon"         //Daemon专属频道，针对Daemon指令在此频道广播下发
 	C_Daemon_Receipt_Topic = "ntcb/Daemon/Receipt" //Daemon专属频道，由Daemon发送命令回执
-
+	C_Bot_Topic            = "ntcb/Bot"            //Bot专属频道
 	//Daemon Command 命令字常量
 	CMD_DAEMON_START_BOT = "daemon_start_bot"
+	//Bot Command 命令字常量
+	CMD_Bot_Start_Job = "bot_start_job" //Bot 启动任务
 )

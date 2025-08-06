@@ -96,3 +96,27 @@ type TCBDaemonCommandReceipt struct {
 	Code        int       `json:"code"`        //状态码
 	Message     string    `json:"message"`     //信息文本
 }
+
+// TCBBotJobStart 在Bot专属频道广播的JobStart消息结构
+type TCBBotJobStart struct {
+}
+
+// TCBBotJobDone 在Bot专属频道广播的JobDone消息结构
+type TCBBotJobDone struct {
+}
+
+// TCBBotCommand Bot专属频道广播的命令消息结构
+type TCBBotCommand struct {
+	CommandID   string    `json:"commandID"`   //发送的命令ID
+	PublishTime time.Time `json:"publishTime"` //发送时间
+	CommandKey  string    `json:"commandKey"`  //命令字
+	Arguments   string    `json:"arguments"`   //参数
+}
+
+// TCBBotCommandReceipt 通过Bot专属频道发送的命令回执,在Bot/{SnowID}/Receipt频道发送
+type TCBBotCommandReceipt struct {
+	CommandID   string    `json:"commandID"`
+	PublishTime time.Time `json:"publishTime"`
+	Code        int       `json:"code"`
+	Message     string    `json:"message"`
+}

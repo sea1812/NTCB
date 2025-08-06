@@ -5,15 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b111d36-054b-4890-9429-cbc92d30ea7a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../BotDolly/botdolly.toml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../BotDolly/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AuthServer/App/CommonFunc.go" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthServer/App/CommonFunc.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../AuthServer/App/CommonIntf.go" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthServer/App/CommonIntf.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AuthServer/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthServer/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthServer/App/ConstTopics.go" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthServer/App/ConstTopics.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../BotDolly/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../BotDolly/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BotDolly/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/../BotDolly/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BotDolly/botdolly.toml" beforeDir="false" afterPath="$PROJECT_DIR$/../BotDolly/botdolly.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../BotDolly/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../BotDolly/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,21 +28,21 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "sea1812"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;sea1812&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/sea1812/NTCB.git",
-    "accountId": "b751f12c-9e80-4b43-822f-a0be34bb643e"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/sea1812/NTCB.git&quot;,
+    &quot;accountId&quot;: &quot;b751f12c-9e80-4b43-822f-a0be34bb643e&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="30g1TgZK0rrBE10ZU9YY6gE8hL0" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -55,27 +51,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "DefaultGoTemplateProperty": "Go File",
-    "Go Build.go build BotDaemon.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "RunOnceActivity.go.modules.automatic.dependencies.download": "true",
-    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "go.import.settings.migrated": "true",
-    "last_opened_file_path": "/Users/edy",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "go.vgo"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;Go Build.go build BotDaemon.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.automatic.dependencies.download&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/edy&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;go.vgo&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <working_directory value="$PROJECT_DIR$" />

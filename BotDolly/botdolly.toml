@@ -13,3 +13,4 @@ brokerUser = ""                                     #Mqtt服务器用户
 brokerPassword = ""                                 #Mqtt服务器用户密码
 statCronPattern = "# */1 * * * *"                  #定期回报Stat消息的定时任务Pattern
 autoshutdown = false                                #运行完Job是否自动退出
+autostartjob = true                                 #启动后是否自动运行Job

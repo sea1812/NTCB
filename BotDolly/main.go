@@ -11,6 +11,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/gogf/gf/v2/encoding/gjson"
@@ -28,6 +29,7 @@ import (
 var (
 	//全局变量定义
 	G_AutoShutdown bool = true //是否运行完Job自动退出
+	G_AUtoStartJob bool = true //是否自动运行Job
 	MqttClient     mqtt.Client
 	CompHeader     *NTPack.TCBComponentHeader //头
 
@@ -39,6 +41,8 @@ func main() {
 	//读取Config中的参数设置
 	mAutoShutdown, _ := g.Config("botdolly").Get(mCtx, "ntcb.autoshutdown")
 	G_AutoShutdown = mAutoShutdown.Bool()
+	mAutoStartJob, _ := g.Config("botdolly").Get(mCtx, "ntcb.autostartjob")
+	G_AUtoStartJob = mAutoStartJob.Bool()
 	//如果设置了不自动退出，则生成系统信号
 	if G_AutoShutdown == false {
 		sigs := make(chan os.Signal, 1)
@@ -99,14 +103,16 @@ func main() {
 			MqttClient.Publish(NTPack.C_Public_Enter_Topic, 0, false, gjson.New(CompHeader).String())
 			//开始等候MQTT消息启动动作
 			fmt.Println("Bot is running.")
-
+			//如果是自动执行JOB，则启动JOB
+			if G_AUtoStartJob == true {
+				go DoBotJob() //在协程中启动Job
+			}
+			//发送JOB启动消息
+			//JOB完成，发送JOB DONE消息
 		}
 	} else {
 		panic(er)
 	}
-	//如果是自动执行JOB，则启动JOB
-	//发送JOB启动消息
-	//JOB完成，发送JOB DONE消息
 	//如果设置了AutoShutdown则退出，否则等待信号
 	if G_AutoShutdown == false {
 		//进入循环，等待退出信号
@@ -114,25 +120,32 @@ func main() {
 		}()
 
 		<-done
-		//退出信号触发，发出离线消息
-		CompHeader.AccessKey = "hidden"
-		MqttClient.Publish(NTPack.C_Public_Exit_Topic, 0, false, gjson.New(CompHeader).String())
-		fmt.Println("Bot exited.")
 
 	}
+	//退出信号触发，发出离线消息
+	CompHeader.AccessKey = "hidden"
+	MqttClient.Publish(NTPack.C_Public_Exit_Topic, 0, false, gjson.New(CompHeader).String())
+	fmt.Println("Bot exited.")
 }
 
 // DoBotJob 运行任务
 func DoBotJob() {
-
+	//发送JobStart消息
+	//Dolly的唯一功能是在专属信道广播Mie Mie
+	for i := 0; i < 3; i++ {
+		MqttClient.Publish(NTPack.C_Bot_Topic+"/"+fmt.Sprint(CompHeader.SnowID)+"/", 0, false, "Mie Mie, I am dolly")
+		fmt.Println("Dolly braying...", i)
+		time.Sleep(3 * time.Second)
+	}
+	//发送JobDone消息
 }
 
 func MqttOnConnect(client mqtt.Client) {
 	//fmt.Println("Connected")
 	//TODO 订阅频道
-	MqttClient.Subscribe("ntcb/#", 0, nil)
-	//订阅Daemon专属频道
-	MqttClient.Subscribe(NTPack.C_Daemon_Topic+"/#", 0, nil)
+	//MqttClient.Subscribe("ntcb/#", 0, nil)
+	//订阅Bot专属频道
+	MqttClient.Subscribe(NTPack.C_Bot_Topic+"/"+fmt.Sprint(CompHeader.SnowID), 0, nil)
 }
 
 func MqttOnLostConnect(client mqtt.Client, err error) {
@@ -140,5 +153,17 @@ func MqttOnLostConnect(client mqtt.Client, err error) {
 }
 
 func MqttOnMessage(client mqtt.Client, Message mqtt.Message) {
-	//处理Daemon专属频道来的消息，主要是启动Bot命令
+	//处理Bot专属频道来的消息，主要是启动Job命令
+	fmt.Println(string(Message.Payload()))
+	var mCmd NTPack.TCBBotCommand
+	m1, er1 := gjson.New(Message.Payload()).ToJson()
+	er := json.Unmarshal(m1, &mCmd)
+	fmt.Println(er1, er)
+	fmt.Println(gjson.New(mCmd).String())
+	if er == nil {
+		fmt.Println(mCmd.CommandKey)
+		if mCmd.CommandKey == NTPack.CMD_Bot_Start_Job {
+			go DoBotJob()
+		}
+	}
 }
