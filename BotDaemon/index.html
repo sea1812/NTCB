@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="zh-CN" x-data="userTable()" x-init="initialize()" :class="{'dark': $store.ui.dark}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Alpine Admin Demo</title>
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: {} }
+        }
+    </script>
+    <!-- Alpine -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+
+<div class="min-h-screen flex">
+    <!-- 侧边栏 -->
+    <aside class="fixed inset-y-0 left-0 w-64 z-30 transform transition-transform duration-200
+                bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700
+                lg:translate-x-0"
+           :class="{'-translate-x-full': !$store.ui.sidebarOpen, 'translate-x-0': $store.ui.sidebarOpen}"
+           @keydown.escape="$store.ui.sidebarOpen=false">
+        <div class="h-16 flex items-center gap-2 px-4 border-b border-slate-200 dark:border-slate-700">
+            <div class="w-8 h-8 rounded bg-slate-900 dark:bg-slate-100"></div>
+            <div class="font-semibold">Alpine Admin</div>
+        </div>
+        <nav class="p-3 space-y-1">
+            <a href="#dashboard" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700">
+                <span>仪表盘</span>
+            </a>
+            <a href="#users" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700">
+                <span>用户管理</span>
+            </a>
+            <a href="#settings" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700">
+                <span>设置</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="flex-1 lg:ml-64">
+        <!-- 顶栏 -->
+        <header class="h-16 bg-white/70 dark:bg-slate-900/60 backdrop-blur border-b border-slate-200 dark:border-slate-700
+                   sticky top-0 z-10 flex items-center justify-between px-4">
+            <div class="flex items-center gap-2">
+                <button class="lg:hidden p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700"
+                        @click="$store.ui.sidebarOpen = true" aria-label="Open sidebar">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                    </svg>
+                </button>
+                <h1 class="font-semibold">控制台</h1>
+            </div>
+            <div class="flex items-center gap-2">
+                <button class="p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700" @click="$store.ui.toggleDark()" aria-label="Toggle dark">
+                    <svg x-show="!$store.ui.dark" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2.25a.75.75 0 0 1 .75.75V5a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75Zm0 16.5a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 .75-.75ZM4.47 4.47a.75.75 0 0 1 1.06 0L6.6 5.53a.75.75 0 1 1-1.06 1.06L4.47 5.53a.75.75 0 0 1 0-1.06Zm11.84 11.84a.75.75 0 0 1 1.06 0l1.06 1.06a.75.75 0 1 1-1.06 1.06l-1.06-1.06a.75.75 0 0 1 0-1.06ZM2.25 12a.75.75 0 0 1 .75-.75H5a.75.75 0 0 1 0 1.5H3a.75.75 0 0 1-.75-.75Zm16.5 0a.75.75 0 0 1 .75-.75H21a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75ZM4.47 19.53a.75.75 0 0 1 1.06 0l1.06-1.06a.75.75 0 1 1 1.06 1.06L6.6 20.6a.75.75 0 0 1-1.06 0l-1.06-1.06Zm11.84-11.84a.75.75 0 0 1 1.06 0l1.06-1.06a.75.75 0 1 1 1.06 1.06L17.37 8.75a.75.75 0 0 1-1.06 0l-1.06-1.06Z"/>
+                    </svg>
+                    <svg x-show="$store.ui.dark" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/>
+                    </svg>
+                </button>
+                <div class="text-sm text-slate-500 dark:text-slate-400 hidden md:block">v1.0</div>
+            </div>
+        </header>
+
+        <!-- 用户管理 -->
+        <main class="p-4 space-y-8">
+            <section id="users" class="space-y-4">
+                <div class="flex flex-wrap items-center gap-2 justify-between">
+                    <h2 class="font-semibold">用户管理</h2>
+                    <div class="flex items-center gap-2">
+                        <input x-model="$store.users.q" @input="$store.users.go(1)"
+                               type="search" placeholder="搜索：姓名/邮箱"
+                               class="px-3 py-2 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm w-56">
+                        <select x-model="$store.users.role" @change="$store.users.go(1)"
+                                class="px-2 py-2 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm">
+                            <option value="all">全部角色</option>
+                            <option>Admin</option>
+                            <option>Editor</option>
+                            <option>Viewer</option>
+                        </select>
+                        <label class="inline-flex items-center gap-2 text-sm">
+                            <input type="checkbox" x-model="$store.users.onlyActive" @change="$store.users.go(1)">
+                            仅显示启用
+                        </label>
+                        <button @click="openModal()"
+                                class="px-3 py-2 rounded bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 text-sm">
+                            新增用户
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overflow-auto rounded-lg border border-slate-200 dark:border-slate-700">
+                    <table class="min-w-full text-sm">
+                        <thead class="bg-slate-50 dark:bg-slate-800/50">
+                        <tr class="text-left">
+                            <th class="p-3 cursor-pointer select-none" @click="toggleSort('name')">
+                                姓名
+                                <SortIcon field="name"></SortIcon>
+                            </th>
+                            <th class="p-3 cursor-pointer select-none" @click="toggleSort('email')">
+                                邮箱
+                                <SortIcon field="email"></SortIcon>
+                            </th>
+                            <th class="p-3">角色</th>
+                            <th class="p-3 cursor-pointer select-none" @click="toggleSort('createdAt')">
+                                注册日期
+                                <SortIcon field="createdAt"></SortIcon>
+                            </th>
+                            <th class="p-3">状态</th>
+                            <th class="p-3">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <template x-for="u in pageRows" :key="u.id">
+                            <tr class="border-t border-slate-200 dark:border-slate-700">
+                                <td class="p-3" x-text="u.name"></td>
+                                <td class="p-3" x-text="u.email"></td>
+                                <td class="p-3" x-text="u.role"></td>
+                                <td class="p-3" x-text="u.createdAt"></td>
+                                <td class="p-3">
+                                    <span class="px-2 py-1 rounded text-xs" :class="u.active ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'" x-text="u.active ? '启用' : '停用'"></span>
+                                </td>
+                                <td class="p-3">
+                                    <button @click="openModal(u)" class="px-2 py-1 border rounded">编辑</button>
+                                    <button @click="toggleActive(u)" class="px-2 py-1 border rounded">切换状态</button>
+                                    <button @click="removeUser(u)" class="px-2 py-1 border rounded">删除</button>
+                                </td>
+                            </tr>
+                        </template>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('userTable', () => ({
+                modalOpen: false,
+                form: { id: null, name: '', email: '', role: 'Viewer', active: true, createdAt: new Date().toISOString().slice(0, 10) },
+                users: [
+                    { id: 1, name: 'Alice', email: 'alice@example.com', role: 'Admin', active: true, createdAt: '2025-01-12' },
+                    { id: 2, name: 'Bob', email: 'bob@example.com', role: 'Editor', active: true, createdAt: '2025-03-28' },
+                    { id: 3, name: 'Carol', email: 'carol@example.com', role: 'Viewer', active: false, createdAt: '2025-05-09' },
+                    { id: 4, name: 'David', email: 'david@example.com', role: 'Editor', active: true, createdAt: '2025-06-17' },
+                    { id: 5, name: 'Eve', email: 'eve@example.com', role: 'Viewer', active: true, createdAt: '2025-07-21' },
+                    { id: 6, name: 'Frank', email: 'frank@example.com', role: 'Viewer', active: false, createdAt: '2025-07-29' }
+                ],
+                sortBy: 'createdAt',
+                sortDir: 'desc',
+
+                get pageRows() {
+                    return this.users.sort((a, b) => {
+                        const key = this.sortBy;
+                        const valA = key === 'createdAt' ? new Date(a[key]) : a[key];
+                        const valB = key === 'createdAt' ? new Date(b[key]) : b[key];
+                        if (valA < valB) return this.sortDir === 'asc' ? -1 : 1;
+                        if (valA > valB) return this.sortDir === 'asc' ? 1 : -1;
+                        return 0;
+                    });
+                },
+
+                toggleSort(field) {
+                    if (this.sortBy === field) {
+                        this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        this.sortBy = field;
+                        this.sortDir = 'asc';
+                    }
+                },
+
+                openModal(row = null) {
+                    this.modalOpen = true;
+                    if (row) this.form = JSON.parse(JSON.stringify(row));
+                    else this.form = { id: null, name: '', email: '', role: 'Viewer', active: true, createdAt: new Date().toISOString().slice(0, 10) };
+                },
+
+                closeModal() {
+                    this.modalOpen = false;
+                },
+
+                submit() {
+                    const f = { ...this.form };
+                    if (!f.name || !f.email) return;
+                    if (f.id) {
+                        this.updateUser(f.id, f);
+                    } else {
+                        this.createUser(f);
+                    }
+                    this.closeModal();
+                },
+
+                createUser(user) {
+                    user.id = this.users.length + 1;
+                    this.users.push(user);
+                },
+
+                updateUser(id, patch) {
+                    const index = this.users.findIndex(user => user.id === id);
+                    if (index > -1) {
+                        this.users[index] = { ...this.users[index], ...patch };
+                    }
+                },
+
+                toggleActive(user) {
+                    user.active = !user.active;
+                },
+
+                removeUser(user) {
+                    this.users = this.users.filter(u => u.id !== user.id);
+                }
+            }));
+        });
+
+        // 排序图标组件
+        Alpine.component('SortIcon', (props) => ({
+            field: props.field,
+            isActive() {
+                return this.$root.sortBy === this.field;
+            },
+            direction() {
+                return this.$root.sortDir;
+            },
+            render() {
+                return `
+                    <span class="inline-block ml-2 opacity-50">
+                        ${this.isActive() && this.direction() === 'asc' ? '▲' : ''}
+                        ${this.isActive() && this.direction() === 'desc' ? '▼' : ''}
+                    </span>
+                `;
+            }
+        }));
+    </script>
+
+</body>
+</html>

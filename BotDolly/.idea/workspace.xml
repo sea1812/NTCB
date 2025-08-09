@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b7328db8-79dc-4975-a044-07f134d2c8db" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../AuthServer/App/CommonIntf.go" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthServer/App/CommonIntf.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AuthServer/App/ConstTopics.go" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthServer/App/ConstTopics.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../BotDaemon/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../BotDaemon/index2.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../BotDaemon/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../BotDaemon/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/botdolly.toml" beforeDir="false" afterPath="$PROJECT_DIR$/botdolly.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
