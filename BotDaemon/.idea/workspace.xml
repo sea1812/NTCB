@@ -5,8 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b111d36-054b-4890-9429-cbc92d30ea7a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/index2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestTSDB/.idea/TestTSDB.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestTSDB/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestTSDB/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestTSDB/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestTSDB/binance_tsdb_data/wal/00000000" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestTSDB/go.sum" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestTSDB/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../BotDolly/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../BotDolly/.idea/workspace.xml" afterDir="false" />
     </list>
