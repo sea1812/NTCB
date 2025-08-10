@@ -10,6 +10,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -41,6 +42,22 @@ const (
 	spotMetricName    = "binance_spot_price"
 	futuresMetricName = "binance_futures_price"
 )
+
+// EventTypePayload 用于预解析，以确定消息的事件类型 (最终健壮版)
+type EventTypePayload struct {
+	EventType interface{} `json:"e"` // 标签必须是小写的 'e'
+}
+
+// MarkPricePayload 结构体定义 (最终修正版)
+type MarkPricePayload struct {
+	EventType       string `json:"e"`
+	EventTime       int64  `json:"E"`
+	Symbol          string `json:"s"`
+	MarkPrice       string `json:"p"`
+	IndexPrice      string `json:"i"`
+	FundingRate     string `json:"r"`
+	NextFundingTime int64  `json:"T"`
+}
 
 // 增加 EventTime 字段，对应 JSON 中的 "E" 使用 interface{} 来接收可能是 string 或 number 的字段
 type BinanceStreamPayload struct {
@@ -86,9 +103,13 @@ func writerRoutine(ctx context.Context, wg *sync.WaitGroup, db *tsdb.DB) {
 	var writerWg sync.WaitGroup
 
 	// 为现货和合约分别启动一个连接和读取的子协程
-	writerWg.Add(2)
+	writerWg.Add(3)
 	go connectAndWrite(ctx, &writerWg, db, spotStreamURL, spotMetricName)
 	go connectAndWrite(ctx, &writerWg, db, futuresStreamURL, futuresMetricName)
+	//futuresMarkPriceURL := "wss://fstream.binance.com/ws/btcusdt@markPrice@1s"
+	//go connectAndWriteFundingRate(ctx, &writerWg, db, futuresMarkPriceURL) // 假设你已创建该函数
+	fundingRateURL := "wss://fstream.binance.com/ws/!markPrice@arr" // 使用这个更健壮的全市场流
+	go connectAndWriteFundingRate(ctx, &writerWg, db, fundingRateURL)
 
 	writerWg.Wait()
 	log.Println("[Writer] 写入协程已停止。")
@@ -302,6 +323,149 @@ func connectAndWrite(ctx context.Context, wg *sync.WaitGroup, db *tsdb.DB, urlSt
 	}
 }
 */
+
+// connectAndWriteFundingRate (最终健壮版 - 带BTCUSDT费率打印)
+// 此版本能够处理币安返回的JSON数组流 (`!markPrice@arr`) 和单个对象流。
+// 它包含了断线重连、优雅退出、批量数据库写入和健壮的错误处理。
+// 新增功能: 当收到 BTCUSDT 的费率时，会专门打印一条日志。
+func connectAndWriteFundingRate(ctx context.Context, wg *sync.WaitGroup, db *tsdb.DB, urlString string) {
+	defer wg.Done()
+	logName := "[funding_rate]"
+
+	// --- 代理配置 (与之前版本相同，无需修改) ---
+	proxyAddress := "" // 设为空字符串 "" 可禁用代理, 例如 "http://127.0.0.1:1080"
+	dialer := websocket.DefaultDialer
+	if proxyAddress != "" {
+		proxyURL, err := url.Parse(proxyAddress)
+		if err != nil {
+			log.Fatalf("FATAL: %s 解析代理URL失败: %v", logName, err)
+		}
+		switch proxyURL.Scheme {
+		case "http", "https":
+			dialer.Proxy = http.ProxyURL(proxyURL)
+		case "socks5", "socks5h":
+			proxyDialer, err := proxy.FromURL(proxyURL, proxy.Direct)
+			if err != nil {
+				log.Fatalf("FATAL: %s 创建SOCKS代理拨号器失败: %v", logName, err)
+			}
+			dialer.NetDial = proxyDialer.Dial
+		default:
+			log.Fatalf("FATAL: %s 不支持的代理协议: %s", logName, proxyURL.Scheme)
+		}
+		log.Printf("%s 将通过代理 %s (%s) 进行连接", logName, proxyURL.Scheme, proxyAddress)
+	} else {
+		log.Printf("%s 将进行直接连接", logName)
+	}
+
+	// 外层循环负责断线重连
+	for {
+		if ctx.Err() != nil {
+			log.Printf("%s 收到退出信号，停止重连。", logName)
+			return
+		}
+
+		conn, _, err := dialer.DialContext(ctx, urlString, nil)
+		if err != nil {
+			log.Printf("%s 连接失败: %v. 5秒后重试...", logName, err)
+			time.Sleep(5 * time.Second)
+			continue
+		}
+		log.Printf("%s 连接到 %s 成功！", logName, urlString)
+
+		go func() { <-ctx.Done(); conn.Close() }()
+
+	messageLoop:
+		for {
+			_, message, err := conn.ReadMessage()
+			if err != nil {
+				if ctx.Err() == nil {
+					log.Printf("%s 读取消息失败（准备重连）: %v", logName, err)
+				} else {
+					log.Printf("%s 连接已按预期关闭。", logName)
+				}
+				break messageLoop
+			}
+
+			trimmedMessage := bytes.TrimSpace(message)
+			if len(trimmedMessage) == 0 {
+				continue
+			}
+
+			var payloads []MarkPricePayload
+			if trimmedMessage[0] == '[' {
+				if err := json.Unmarshal(trimmedMessage, &payloads); err != nil {
+					log.Printf("%s [ERROR] 解析JSON数组失败: %v. Raw: %s", logName, err, string(trimmedMessage))
+					continue
+				}
+			} else if trimmedMessage[0] == '{' {
+				var singlePayload MarkPricePayload
+				if err := json.Unmarshal(trimmedMessage, &singlePayload); err != nil {
+					log.Printf("%s [ERROR] 解析JSON对象失败: %v. Raw: %s", logName, err, string(trimmedMessage))
+					continue
+				}
+				payloads = append(payloads, singlePayload)
+			} else {
+				log.Printf("%s [WARN] 收到未知格式的消息，已忽略. Raw: %s", logName, string(trimmedMessage))
+				continue
+			}
+
+			if len(payloads) == 0 {
+				continue
+			}
+
+			app := db.Appender(ctx)
+			var successCount int
+			for _, payload := range payloads {
+				if payload.EventType != "markPriceUpdate" {
+					continue
+				}
+
+				rate, err := strconv.ParseFloat(payload.FundingRate, 64)
+				if err != nil {
+					log.Printf("%s [ERROR] 资金费率 '%s' 转换失败: %v", logName, payload.FundingRate, err)
+					continue
+				}
+
+				// ========================================================
+				// --- 新增代码：检查是否为 BTCUSDT 并打印费率 ---
+				// ========================================================
+				if payload.Symbol == "BTCUSDT" {
+					log.Printf("%s [BTCUSDT-RATE] Rate: %.8f (Next Settle: %s)",
+						logName,
+						rate,
+						time.UnixMilli(payload.NextFundingTime).UTC().Format("15:04:05 UTC"))
+				}
+				// ========================================================
+
+				// --- 原有数据库写入逻辑 (保持不变) ---
+				_, err = app.Append(0, labels.FromStrings("__name__", "binance_futures_funding_rate", "symbol", payload.Symbol), payload.EventTime, rate)
+				if err != nil {
+					log.Printf("%s [ERROR] TSDB Append(rate)失败: %v", logName, err)
+					app.Rollback()
+					break
+				}
+
+				_, err = app.Append(0, labels.FromStrings("__name__", "binance_futures_next_funding_time", "symbol", payload.Symbol), payload.EventTime, float64(payload.NextFundingTime))
+				if err != nil {
+					log.Printf("%s [ERROR] TSDB Append(next_time)失败: %v", logName, err)
+					app.Rollback()
+					break
+				}
+
+				successCount++
+			}
+
+			if successCount > 0 {
+				if err := app.Commit(); err != nil {
+					log.Printf("%s [ERROR] TSDB Commit失败: %v", logName, err)
+				} else {
+					// 这条通用日志仍然会打印，以确认数据写入成功
+					log.Printf("%s [SUCCESS] 成功处理并写入 %d 条资金费率更新。", logName, successCount)
+				}
+			}
+		}
+	}
+}
 
 // connectAndWrite 最终、完整、健壮的版本，支持优雅退出
 func connectAndWrite(ctx context.Context, wg *sync.WaitGroup, db *tsdb.DB, urlString, metricName string) {

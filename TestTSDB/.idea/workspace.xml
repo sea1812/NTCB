@@ -5,15 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="540df637-fceb-48cb-9ac0-fdba470e3edc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/TestTSDB.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/binance_tsdb_data/wal/00000000" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/binance_tsdb_data/lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../BotDaemon/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../BotDaemon/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../BotDolly/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../BotDolly/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/binance_tsdb_data/chunks_head/000001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/binance_tsdb_data/wal/00000000" beforeDir="false" afterPath="$PROJECT_DIR$/binance_tsdb_data/wal/00000000" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
