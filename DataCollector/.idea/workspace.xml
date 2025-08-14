@@ -4,20 +4,20 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4b111d36-054b-4890-9429-cbc92d30ea7a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../DataCollector/.idea/DataCollector.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../DataCollector/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../DataCollector/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../DataCollector/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../DataCollector/go.sum" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../DataCollector/main.go" afterDir="false" />
+    <list default="true" id="a871bcd7-efea-4fb4-9f04-d978f1883be8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/DataCollector.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../TestGobwas/.idea/TestGobwas.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../TestGobwas/.idea/modules.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../TestGobwas/.idea/vcs.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../TestGobwas/.idea/workspace.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../TestGobwas/go.sum" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../TestGobwas/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BotDaemon/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../BotDaemon/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../BotDolly/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../BotDolly/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../EmbeddedCore/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../EmbeddedCore/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TestTSDB/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../TestTSDB/.idea/workspace.xml" afterDir="false" />
@@ -52,9 +52,9 @@
   }
 }</component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 6
+  &quot;associatedIndex&quot;: 2
 }</component>
-  <component name="ProjectId" id="30g1TgZK0rrBE10ZU9YY6gE8hL0" />
+  <component name="ProjectId" id="31Fr4NgZ3E145VBRTRaqTiuviBt" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
@@ -62,39 +62,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
-    &quot;Go Build.go build BotDaemon.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.automatic.dependencies.download&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/edy&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;go.vgo&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "DefaultGoTemplateProperty": "Go File",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.automatic.dependencies.download": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "go.import.settings.migrated": "true",
+    "last_opened_file_path": "/Users/edy",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "go.vgo"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <working_directory value="$PROJECT_DIR$" />
       <go_parameters value="-i" />
       <kind value="FILE" />
-      <method v="2" />
-    </configuration>
-    <configuration name="go build BotDaemon" type="GoApplicationRunConfiguration" factoryName="Go Application" nameIsGenerated="true">
-      <module name="BotDaemon" />
-      <working_directory value="$PROJECT_DIR$" />
-      <kind value="PACKAGE" />
-      <package value="BotDaemon" />
       <method v="2" />
     </configuration>
   </component>
