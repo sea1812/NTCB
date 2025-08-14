@@ -145,6 +145,7 @@ func binanceWsConnectAndPublish(ctx context.Context, wg *sync.WaitGroup, name st
 				continue
 			}
 			log.Printf("%s [SUCCESS] 连接成功！", logName)
+			log.Println("请打开终端订阅nats sub \"binance.>\"")
 
 			go func() {
 				<-ctx.Done()
