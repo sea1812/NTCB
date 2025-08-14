@@ -28,6 +28,13 @@ func main() {
 		Port:   4222,        // 端口
 		NoLog:  false,       // 开启日志（开发环境便于调试）
 		NoSigs: true,        // 禁用服务器自带的信号处理（由主程序统一处理）
+		// --- 在这里开启并配置WebSocket服务 ---
+		/*
+			Websocket: server.WebsocketOpts{
+				Host: "0.0.0.0", // 监听所有网络接口
+				Port: 8080,     // WebSocket端口
+				// NoTLS: true,  // 在生产环境中，您应该配置TLS
+			},*/
 	}
 
 	// 2. 启动嵌入式NATS服务器
@@ -96,7 +103,7 @@ func main() {
 	nc.Drain() // 先关闭客户端连接（确保消息处理完成）
 	fmt.Println("🔌 客户端连接已关闭")
 
-	s.Shutdown()                      // 关闭NATS服务器
+	s.Shutdown()                // 关闭NATS服务器
 	fmt.Println("🛑 NATS服务器已关闭") // 移除ReadyForShutdown判断
 
 	fmt.Println("👋 程序已退出")

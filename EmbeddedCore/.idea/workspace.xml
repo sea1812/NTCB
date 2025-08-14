@@ -8,8 +8,8 @@
       <change beforePath="$PROJECT_DIR$/../BotDaemon/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../BotDaemon/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../BotDolly/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../BotDolly/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../DataCollector/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../DataCollector/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DataCollector/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../DataCollector/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TestGobwas/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../TestGobwas/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TestTSDB/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../TestTSDB/.idea/workspace.xml" afterDir="false" />
     </list>
