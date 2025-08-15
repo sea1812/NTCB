@@ -1,0 +1,44 @@
+body {
+    background-color: black;
+    color: white;
+}
+
+.bg-primary-custom {
+    background-color: #0d6efd;
+}
+
+.bg-dark-custom {
+    background-color: #212529;
+}
+
+.bg-secondary-custom {
+    background-color: #343a40;
+}
+
+.table td, .table th {
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+.text-white {
+    color: white;
+}
+
+.list-unstyled {
+    list-style-type: none;
+}
+
+h5, h4 {
+    color: white;
+}

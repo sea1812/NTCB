@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptocurrency Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@1.9.12"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2"></script>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+
+        .bg-primary-custom {
+            background-color: #0d6efd;
+        }
+
+        .bg-dark-custom {
+            background-color: #212529;
+        }
+
+        .bg-secondary-custom {
+            background-color: #343a40;
+        }
+    </style>
+</head>
+<body>
+<div class="d-flex h-100">
+
+    <!-- Sidebar -->
+    <div class="bg-primary-custom text-white p-3" style="width: 80px;">
+        <div class="d-flex flex-column align-items-center">
+            <i class="fas fa-home mb-4" style="font-size: 24px;"></i>
+            <i class="fas fa-search mb-4" style="font-size: 24px;"></i>
+            <i class="fas fa-chart-line mb-4" style="font-size: 24px;"></i>
+            <i class="fas fa-cogs mb-4" style="font-size: 24px;"></i>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-grow-1 p-4">
+
+        <!-- Header Section -->
+        <div class="d-flex justify-between align-items-center mb-4">
+            <div class="flex-grow-1">
+                <input type="text" class="form-control bg-dark-custom text-white border-primary" placeholder="Search Here..." />
+            </div>
+            <button class="btn btn-warning">Add more +</button>
+        </div>
+
+        <!-- Assets Section -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="bg-secondary-custom p-3 rounded">
+                    <h5>BTC</h5>
+                    <p class="text-success">+2.50%</p>
+                    <p>$10,420.30</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="bg-secondary-custom p-3 rounded">
+                    <h5>ETH</h5>
+                    <p class="text-danger">-0.10%</p>
+                    <p>$5,672.40</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="bg-secondary-custom p-3 rounded">
+                    <h5>LUNA</h5>
+                    <p class="text-danger">-12.32%</p>
+                    <p>$8,510.10</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="bg-secondary-custom p-3 rounded">
+                    <h5>BNB</h5>
+                    <p class="text-success">+2.68%</p>
+                    <p>$12,410.80</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Spot Trading Section -->
+        <div class="mb-4">
+            <h4>Spot Trading</h4>
+            <div class="overflow-auto bg-secondary-custom p-3 rounded">
+                <table class="table table-dark table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Tokens</th>
+                        <th>Last Price</th>
+                        <th>Changed</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>BTC</td>
+                        <td>36540.42</td>
+                        <td class="text-success">+15%</td>
+                    </tr>
+                    <tr>
+                        <td>ETH</td>
+                        <td>14342.13</td>
+                        <td class="text-danger">-14%</td>
+                    </tr>
+                    <tr>
+                        <td>HT</td>
+                        <td>8321.13</td>
+                        <td class="text-muted">-0.3%</td>
+                    </tr>
+                    <tr>
+                        <td>DOT</td>
+                        <td>212.35</td>
+                        <td class="text-success">+2.43%</td>
+                    </tr>
+                    <tr>
+                        <td>XRP</td>
+                        <td>185.72</td>
+                        <td class="text-success">+1.78%</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="bg-secondary-custom p-3 rounded">
+                    <h5>USD/BTC</h5>
+                    <div id="chart" class="h-40 bg-dark-custom"></div> <!-- Replace with a real chart library -->
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="bg-secondary-custom p-3 rounded">
+                    <h5>My Total Balance</h5>
+                    <p class="display-4">$18,983.34</p>
+                    <p class="text-success">+2.50%</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Section -->
+        <div>
+            <h4>Activities</h4>
+            <div class="bg-secondary-custom p-3 rounded">
+                <ul class="list-unstyled">
+                    <li class="text-success">Deposited Funds: $10.00 - Jul 16 2024 10:30</li>
+                    <li class="text-danger">Withdraw Funds: $8.00 - Jul 14 2024 15:45</li>
+                    <li class="text-success">Received Bitcoin: $10.00 - Jul 12 2024 18:00</li>
+                    <li class="text-success">Deposited Funds: $8.00 - Jul 10 2024 12:20</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

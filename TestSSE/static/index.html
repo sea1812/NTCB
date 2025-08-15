@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSE + htmx 实时事件演示</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/sse.js"></script>
+</head>
+<body class="bg-light min-vh-100">
+<div class="container py-5 px-3 max-w-4xl">
+    <header class="mb-5 text-center">
+        <h1 class="display-5 fw-bold text-dark mb-2">SSE 实时事件演示</h1>
+        <p class="text-secondary">GoFrame后端 + htmx前端实现单端点多类型事件推送</p>
+    </header>
+
+    <!-- 连接状态指示器 -->
+    <div class="alert alert-info d-flex align-items-center mb-4" id="connection-status">
+        <i class="fa fa-info-circle me-3 fs-5"></i>
+        <p class="mb-0">
+            连接状态: <span class="fw-medium" id="status-text">正在连接...</span>
+        </p>
+    </div>
+
+    <!-- 事件展示区域 -->
+    <div class="row g-4">
+        <!-- 系统状态 -->
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm p-4 h-100">
+                <h2 class="h5 fw-semibold mb-3 d-flex align-items-center">
+                    <i class="fa fa-server text-success me-2"></i>系统状态
+                </h2>
+                <div id="system-status" class="text-dark">
+                    <p>等待系统状态更新...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 任务进度 -->
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm p-4 h-100">
+                <h2 class="h5 fw-semibold mb-3 d-flex align-items-center">
+                    <i class="fa fa-tasks text-primary me-2"></i>任务进度
+                </h2>
+                <div id="progress-container" class="text-dark">
+                    <p>等待进度更新...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 通知 -->
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm p-4 h-100">
+                <h2 class="h5 fw-semibold mb-3 d-flex align-items-center">
+                    <i class="fa fa-bell text-info me-2"></i>通知
+                </h2>
+                <div id="notifications" class="gap-2 d-flex flex-column max-h-50 overflow-y-auto">
+                    <p class="text-secondary fst-italic">暂无通知</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 系统消息 -->
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm p-4 h-100">
+                <h2 class="h5 fw-semibold mb-3 d-flex align-items-center">
+                    <i class="fa fa-comment text-secondary me-2"></i>系统消息
+                </h2>
+                <div id="alerts" class="gap-2 d-flex flex-column mb-3"></div>
+                <div id="info-messages" class="gap-2 d-flex flex-column max-h-40 overflow-y-auto">
+                    <p class="text-secondary fst-italic">等待系统消息...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SSE连接与事件处理核心脚本 -->
+<script>
+    // 状态元素与标记
+    const statusTextEl = document.getElementById('status-text');
+    let isConnected = false;
+
+    // 更新连接状态
+    function markAsConnected() {
+        if (!isConnected) {
+            console.log('连接成功');
+            isConnected = true;
+            statusTextEl.textContent = '已连接';
+            statusTextEl.classList.remove('text-secondary');
+            statusTextEl.classList.add('text-success');
+        }
+    }
+
+    // 1. 建立SSE连接（原生API）
+    const sse = new EventSource('/events');
+
+    // 监听连接成功
+    sse.onopen = function() {
+        console.log('SSE连接已建立');
+        markAsConnected();
+    };
+
+    // 监听连接错误
+    sse.onerror = function(error) {
+        console.error('SSE连接错误:', error);
+        statusTextEl.textContent = '连接错误';
+        statusTextEl.classList.add('text-danger');
+    };
+
+    // 2. 手动绑定事件处理（不依赖htmx自动映射，确保事件被捕获）
+    // 系统状态事件
+    sse.addEventListener('system-status', function(event) {
+        console.log('收到系统状态事件:', event.data);
+        markAsConnected();
+        const data = JSON.parse(event.data);
+        document.getElementById('system-status').innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>状态: ${data.status}</span>
+                    <span>系统负载: ${data.load}%</span>
+                </div>
+                <div class="w-100 bg-secondary bg-opacity-20 rounded-full h-2">
+                    <div class="bg-success h-2 rounded-full" style="width: ${data.load}%"></div>
+                </div>
+            `;
+    });
+
+    // 通知事件
+    sse.addEventListener('notification', function(event) {
+        console.log('收到通知事件:', event.data);
+        markAsConnected();
+        const data = JSON.parse(event.data);
+        const notificationEl = document.createElement('div');
+        notificationEl.className = 'p-2 bg-info bg-opacity-10 rounded border border-info border-opacity-30';
+        notificationEl.innerHTML = `
+                <p class="small mb-1">${data.message}</p>
+                <p class="text-xs text-secondary mb-0">${new Date().toLocaleTimeString()}</p>
+            `;
+        const container = document.getElementById('notifications');
+        // 移除"暂无通知"占位符
+        if (container.querySelector('.fst-italic')) {
+            container.innerHTML = '';
+        }
+        container.appendChild(notificationEl);
+        // 限制显示数量
+        if (container.children.length > 5) {
+            container.removeChild(container.firstChild);
+        }
+    });
+
+    // 进度事件
+    sse.addEventListener('progress', function(event) {
+        console.log('收到进度事件:', event.data);
+        markAsConnected();
+        const data = JSON.parse(event.data);
+        document.getElementById('progress-container').innerHTML = `
+                <p class="mb-1 small">${data.task}</p>
+                <div class="w-100 bg-secondary bg-opacity-20 rounded-full h-2 mb-1">
+                    <div class="bg-primary h-2 rounded-full" style="width: ${data.percent}%"></div>
+                </div>
+                <p class="small text-end mb-0">${data.percent}%</p>
+            `;
+    });
+
+    // 警告事件
+    sse.addEventListener('warning', function(event) {
+        console.log('收到警告事件:', event.data);
+        markAsConnected();
+        const data = JSON.parse(event.data);
+        const alertEl = document.createElement('div');
+        alertEl.className = 'p-2 bg-warning bg-opacity-10 rounded border border-warning border-opacity-30';
+        alertEl.innerHTML = `
+                <div class="d-flex">
+                    <i class="fa fa-exclamation-triangle text-warning mt-0.5 me-2"></i>
+                    <div>
+                        <p class="small mb-1">${data.message}</p>
+                        <p class="text-xs text-secondary mb-0">${new Date().toLocaleTimeString()}</p>
+                    </div>
+                </div>
+            `;
+        const container = document.getElementById('alerts');
+        container.appendChild(alertEl);
+        // 限制显示数量
+        if (container.children.length > 5) {
+            container.removeChild(container.firstChild);
+        }
+    });
+
+    // 信息事件
+    sse.addEventListener('info', function(event) {
+        console.log('收到信息事件:', event.data);
+        markAsConnected();
+        const data = JSON.parse(event.data);
+        const infoEl = document.createElement('p');
+        infoEl.className = 'small text-secondary';
+        infoEl.textContent = data.message;
+        const container = document.getElementById('info-messages');
+        // 移除"等待系统消息"占位符
+        if (container.querySelector('.fst-italic')) {
+            container.innerHTML = '';
+        }
+        container.appendChild(infoEl);
+        // 限制显示数量
+        if (container.children.length > 5) {
+            container.removeChild(container.firstChild);
+        }
+    });
+
+    // 3. 页面关闭时关闭SSE连接
+    window.addEventListener('beforeunload', function() {
+        sse.close();
+        console.log('页面关闭，SSE连接已关闭');
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket 实时推送修复版</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 确保HTMX和WebSocket扩展正确加载 -->
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/ws.js"></script>
+</head>
+<body class="bg-light min-vh-100">
+<div class="container py-5 px-3 max-w-4xl">
+    <header class="mb-5 text-center">
+        <h1 class="display-5 fw-bold text-dark mb-2">WebSocket 实时推送演示</h1>
+        <p class="text-secondary">GoFrame后端+Htmx前端实现WebSocket多事件推送</p>
+    </header>
+
+    <!-- 连接状态 -->
+    <div class="alert alert-info d-flex align-items-center mb-4" id="connection-status">
+        <i class="fa fa-info-circle me-3 fs-5"></i>
+        <p class="mb-0">
+            连接状态: <span class="fw-medium" id="status-text">正在连接...</span>
+        </p>
+    </div>
+
+    <!-- 核心修复：简化WebSocket配置，确保事件绑定正确 -->
+    <div hx-ext="ws" ws-connect="/ws" id="ws-container">
+        <!-- 事件处理器与后端事件类型严格匹配 -->
+        <div ws-event="system-status" hx-target="#system-status" hx-swap="innerHTML"></div>
+        <div ws-event="notification" hx-target="#notifications" hx-swap="beforeend"></div>
+        <div ws-event="progress" hx-target="#progress-container" hx-swap="innerHTML"></div>
+        <div ws-event="warning" hx-target="#alerts" hx-swap="beforeend"></div>
+        <div ws-event="info" hx-target="#info-messages" hx-swap="beforeend"></div>
+        <div ws-event="connect" hx-target="#status-text" hx-swap="none"></div>
+    </div>
+
+    <!-- 展示区域 -->
+    <div class="row g-4">
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm p-4 h-100">
+                <h2 class="h5 fw-semibold mb-3">
+                    <i class="fa fa-server text-success me-2"></i>系统状态
+                </h2>
+                <div id="system-status" class="text-dark">
+                    <p>等待更新...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm p-4 h-100">
+                <h2 class="h5 fw-semibold mb-3">
+                    <i class="fa fa-tasks text-primary me-2"></i>任务进度
+                </h2>
+                <div id="progress-container" class="text-dark">
+                    <p>等待更新...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm p-4 h-100">
+                <h2 class="h5 fw-semibold mb-3">
+                    <i class="fa fa-bell text-info me-2"></i>通知
+                </h2>
+                <div id="notifications" class="gap-2 d-flex flex-column max-h-50 overflow-y-auto">
+                    <p class="text-secondary fst-italic">暂无通知</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm p-4 h-100">
+                <h2 class="h5 fw-semibold mb-3">
+                    <i class="fa fa-comment text-secondary me-2"></i>系统消息
+                </h2>
+                <div id="alerts" class="gap-2 d-flex flex-column mb-3"></div>
+                <div id="info-messages" class="gap-2 d-flex flex-column max-h-40 overflow-y-auto">
+                    <p class="text-secondary fst-italic">等待消息...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // 状态元素
+    const statusTextEl = document.getElementById('status-text');
+    let isConnected = false;
+
+    // 修复1：添加详细日志，追踪连接过程
+    console.log('前端脚本加载完成，准备连接WebSocket');
+
+    // 修复2：使用原生WebSocket作为备选连接方案
+    let nativeWs;
+    function initNativeWebSocket() {
+        if (nativeWs) return;
+        // 直接连接WebSocket（绕过HTMX扩展问题）
+        nativeWs = new WebSocket('ws://' + window.location.host + '/ws');
+
+        nativeWs.onopen = function() {
+            console.log('原生WebSocket连接成功');
+            onConnected();
+        };
+
+        nativeWs.onmessage = function(event) {
+            console.log('原生WebSocket收到消息:', event.data);
+            // 手动处理消息（确保数据能被渲染）
+            handleMessage(event.data);
+        };
+
+        nativeWs.onerror = function(error) {
+            console.error('原生WebSocket错误:', error);
+            onError();
+        };
+
+        nativeWs.onclose = function() {
+            console.log('原生WebSocket关闭');
+            onDisconnected();
+        };
+    }
+
+    // 修复3：统一消息处理函数（HTMX和原生WebSocket共用）
+    function handleMessage(rawData) {
+        try {
+            const event = JSON.parse(rawData);
+            if (!event.type) return;
+
+            // 标记连接成功
+            onConnected();
+
+            // 生成HTML
+            let html = '';
+            switch(event.type) {
+                case 'system-status':
+                    html = `
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>状态: ${event.data.status}</span>
+                                <span>负载: ${event.data.load}%</span>
+                            </div>
+                            <div class="w-100 bg-secondary bg-opacity-20 rounded-full h-2">
+                                <div class="bg-success h-2 rounded-full" style="width: ${event.data.load}%"></div>
+                            </div>
+                        `;
+                    document.getElementById('system-status').innerHTML = html;
+                    break;
+
+                case 'notification':
+                    const notifContainer = document.getElementById('notifications');
+                    if (notifContainer.querySelector('.fst-italic')) notifContainer.innerHTML = '';
+                    html = `
+                            <div class="p-2 bg-info bg-opacity-10 rounded border border-info border-opacity-30">
+                                <p class="small">${event.data.message}</p>
+                                <p class="text-xs text-secondary">${new Date().toLocaleTimeString()}</p>
+                            </div>
+                        `;
+                    notifContainer.insertAdjacentHTML('beforeend', html);
+                    if (notifContainer.children.length > 5) notifContainer.removeChild(notifContainer.firstChild);
+                    break;
+
+                case 'progress':
+                    html = `
+                            <p class="mb-1 small">${event.data.task}</p>
+                            <div class="w-100 bg-secondary bg-opacity-20 rounded-full h-2 mb-1">
+                                <div class="bg-primary h-2 rounded-full" style="width: ${event.data.percent}%"></div>
+                            </div>
+                            <p class="small text-end">${event.data.percent}%</p>
+                        `;
+                    document.getElementById('progress-container').innerHTML = html;
+                    break;
+
+                case 'warning':
+                    const alertContainer = document.getElementById('alerts');
+                    html = `
+                            <div class="p-2 bg-warning bg-opacity-10 rounded border border-warning border-opacity-30">
+                                <i class="fa fa-exclamation-triangle text-warning me-2"></i>
+                                <p class="small d-inline">${event.data.message}</p>
+                                <p class="text-xs text-secondary">${new Date().toLocaleTimeString()}</p>
+                            </div>
+                        `;
+                    alertContainer.insertAdjacentHTML('beforeend', html);
+                    if (alertContainer.children.length > 5) alertContainer.removeChild(alertContainer.firstChild);
+                    break;
+
+                case 'info':
+                    const infoContainer = document.getElementById('info-messages');
+                    if (infoContainer.querySelector('.fst-italic')) infoContainer.innerHTML = '';
+                    html = `<p class="small text-secondary">${event.data.message}</p>`;
+                    infoContainer.insertAdjacentHTML('beforeend', html);
+                    if (infoContainer.children.length > 5) infoContainer.removeChild(infoContainer.firstChild);
+                    break;
+            }
+        } catch (e) {
+            console.error('消息解析失败:', e, '原始数据:', rawData);
+        }
+    }
+
+    // 状态更新函数
+    function onConnected() {
+        if (!isConnected) {
+            isConnected = true;
+            statusTextEl.textContent = '已连接';
+            statusTextEl.className = 'fw-medium text-success';
+        }
+    }
+
+    function onError() {
+        statusTextEl.textContent = '连接错误';
+        statusTextEl.className = 'fw-medium text-danger';
+    }
+
+    function onDisconnected() {
+        statusTextEl.textContent = '已断开';
+        statusTextEl.className = 'fw-medium text-warning';
+    }
+
+    // 修复4：监听HTMX事件，同时兼容原生处理
+    document.addEventListener('htmx:ws:open', function() {
+        console.log('HTMX WebSocket连接成功');
+        onConnected();
+    });
+
+    document.addEventListener('htmx:ws:afterMessage', function(evt) {
+        console.log('HTMX收到消息:', evt.detail.message);
+        handleMessage(evt.detail.message); // 复用消息处理函数
+    });
+
+    document.addEventListener('htmx:ws:error', onError);
+    document.addEventListener('htmx:ws:close', onDisconnected);
+
+    // 修复5：如果HTMX连接失败，1秒后启动原生WebSocket备选方案
+    setTimeout(() => {
+        if (!isConnected) {
+            console.log('HTMX连接失败，尝试原生WebSocket');
+            initNativeWebSocket();
+        }
+    }, 1000);
+</script>
+</body>
+</html>
