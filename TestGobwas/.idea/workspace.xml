@@ -5,29 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="47e55963-8d58-4df4-b576-2850fc5fda38" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../EmbeddedCore/demo.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TestSSE/.idea/TestSSE.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TestSSE/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TestSSE/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TestSSE/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TestSSE/go.sum" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TestSSE/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TestSSE/static/demo.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TestSSE/static/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TestSSE/static/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TestWS-SSE/.idea/TestWS-SSE.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TestWS-SSE/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TestWS-SSE/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TestWS-SSE/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TestWS-SSE/go.sum" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TestWS-SSE/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TestWS-SSE/public/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../BotDaemon/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../BotDaemon/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../BotDolly/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../BotDolly/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../DataCollector/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../DataCollector/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../EmbeddedCore/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../EmbeddedCore/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TestSSE/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../TestSSE/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TestTSDB/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../TestTSDB/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TestWS-SSE/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../TestWS-SSE/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
